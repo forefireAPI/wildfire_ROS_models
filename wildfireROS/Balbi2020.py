@@ -56,11 +56,7 @@ def Balbi2020(valueOf):
 
     lalpha = math.atan(valueOf['slope'])
 
- 
-
-    
- 
-    R = 0.1
+    R = 0.1  # first guess in iteration
     Rnew = 0
     maxEps = 0.001
     N = 400
@@ -170,7 +166,6 @@ def test_plot():
     fmcW02 = np.ones(np.shape(fmcInput))
     fmcW8 = np.ones(np.shape(fmcInput))
     
-    
     for i,val in enumerate(windInput):
         pineNeedle["wind"]    = val
         pineNeedle2["wind"]    = val
@@ -180,24 +175,28 @@ def test_plot():
         wros03[i] =  Balbi2020(pineNeedle2)
         wros08[i] =  Balbi2020(pineNeedle3)
     
-    pineNeedle["wind"]    = 0.2
-    pineNeedle2["wind"]    = 8
+    
+    pineNeedleW = dict(pineNeedle)
+    pineNeedleW2 = dict(pineNeedleW) 
+    
+    pineNeedleW["wind"]    = 0.2
+    pineNeedleW2["wind"]    = 8
 
     #varying fmc
-    pineNeedle["Sigmad"] = 0.9 #table. 2
-    pineNeedle2["Sigmad"] = 0.9 #table. 2
+    pineNeedleW["Sigmad"] = 0.9 #table. 2
+    pineNeedleW2["Sigmad"] = 0.9 #table. 2
     
-    pineNeedle["Md"]    = 0
-    pineNeedle2["Md"]    = 0  
-    fmc0RosW02 = Balbi2020(pineNeedle)
-    fmc0RosW8 = Balbi2020(pineNeedle2)
+    pineNeedleW["Md"]    = 0
+    pineNeedleW2["Md"]    = 0  
+    fmc0RosW02 = Balbi2020(pineNeedleW)
+    fmc0RosW8 = Balbi2020(pineNeedleW2)
     
 
     for i,val in enumerate(fmcInput):
-        pineNeedle["Md"]    = val
-        pineNeedle2["Md"]    = val 
-        fmcW02[i] =  Balbi2020(pineNeedle)/fmc0RosW02
-        fmcW8[i] =  Balbi2020(pineNeedle2)/fmc0RosW8
+        pineNeedleW["Md"]    = val
+        pineNeedleW2["Md"]    = val 
+        fmcW02[i] =  Balbi2020(pineNeedleW)/fmc0RosW02
+        fmcW8[i] =  Balbi2020(pineNeedleW2)/fmc0RosW8
         
      
     fig, (ax1,ax2) = plt.subplots(2, 1, sharey=False)

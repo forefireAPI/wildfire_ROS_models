@@ -106,39 +106,86 @@ def rothev2(valueOf):
     return rate_of_spread
 
 
-def RothermelAndrews2018(valueOf,fuelload, fueldepth, windspeed, slope, fuelmoisture, fuelsav):
+
+
+
+
+fuel_properties = {
+    "CODE": "a shortname - code",
+    "INDEX": "an integer used as classification number",
+    "fl1h": "Ovendry 1h fuel load",
+    "fl10h": "Ovendry 10h fuel load",
+    "fl100h": "Ovendry 100h fuel load",
+    "flLherb": "live herbaceous load",
+    "flLwood": "live woody load",
+    "ftype": "S for static, D for dynamic, N for Non applicable",
+    "SAV1h": "Surface-area-to-volume ratio for 1h fuel",
+    "SAV10h": "Surface-area-to-volume ratio for 10h fuel",
+    "SAV100h": "Surface-area-to-volume ratio for 100h fuel",
+    "SAVLDherb": "Surface-area-to-volume ratio for live and dead herbaceous",
+    "SAVLwood": "Surface-area-to-volume ratio for live woody",
+    "fd": "fuel bed depth",
+    "SAVcar": "Characteristic SAV",
+    "Dme": "dead fuel moisture of extinction",
+    "H": "Heat content",
+    "bulkDens": "bulk density",
+    "packRatio": "relative packing ratio",
+    "fuelDens": "Ovendry fuel particle density",
+    "totMineral": "Total fuel particle mineral relative content",
+    "effectMineral": "effective (silica-free) mineral relative content",
+    "wind": "wind speed",
+    "slope": "slope angle",
+    "mdOnDry1h": "1 hour fuel moisture expressed as ratio on dry mass basis",
+    "mdOnDry10h": "10 hour fuel moisture expressed as ratio on dry mass basis",
+    "mdOnDry100h": "100 hour fuel moisture expressed as ratio on dry mass basis",
+    "mdOnTotal1h": "1 hour fuel moisture expressed as ratio on total mass basis",
+    "mdOnTotal10h": "10 hour fuel moisture expressed as ratio on total mass basis",
+    "mdOnTotal100h": "100 hour fuel moisture expressed as ratio on total mass basis",
+    "mdOnDryLHerb": "live herbaceous fuel moisture expressed as ratio on total mass basis",
+    "mdOnDryLWood": "live woody fuel moisture expressed as ratio on total mass basis"
+}
+
+
+
+
+def RothermelAndrews2018(Z, print_calculus = False):
+    
+    # input requirements
+    wo = Z.fl1h_lbft2 # Ovendry fuel loading 
+    fd = Z.fd_ft # Fuel depth (ft)
+    wv = Z.wind_ftmin   # Wind velocity at midflame height (ft/minute) 
+    fpsa = Z.SAVcar_ftinv   # Fuel Particle surface area to volume ratio (1/ft)
+    mf = Z.mdOnDry1h_r   # Fuel particle moisture content
+    
+    h = Z.H_BTUlb  # Fuel particle low heat content
+    pp = Z.fuelDens_lbft3  # Ovendry particle density
+    st = Z.totMineral_r  # Fuel particle mineral content
+    se = Z.effectMineral_r  # Fuel Particle effective mineral content
+    mois_ext = Z.Dme_r  # Moisture content of extinction
+    wind = Z.wind_ftmin # wind velocity at mid flame
+    slope_rad = Z.slope_rad # slope angle 
+    
+    if(print_calculus):
+        print("Rothermel model such as Andrews and Rothermel 2017")
+        print(f"Ovendry Fuel Loading (wo): {Z.fl1h_lbft2} lb/ft²")
+        print(f"Fuel Depth (fd): {Z.fd_ft} ft")
+        print(f"Wind Velocity at Midflame Height (wv): {Z.wind_ftmin} ft/min")
+        print(f"Fuel Particle Surface Area to Volume Ratio (fpsa): {Z.SAVcar_ftinv} 1/ft")
+        print(f"Fuel Particle Moisture Content (mf): {Z.mdOnDry1h_r} ratio")
+        print(f"Fuel Particle Low Heat Content (h): {Z.H_BTUlb} BTU/lb")
+        print(f"Ovendry Particle Density (pp): {Z.fuelDens_lbft3} lb/ft³")
+        print(f"Fuel Particle Mineral Content (st): {Z.totMineral_r} ratio")
+        print(f"Fuel Particle Effective Mineral Content (se): {Z.effectMineral_r} ratio")
+        print(f"Moisture Content of Extinction (mois_ext): {Z.Dme_r} ratio ")
+        print(f"Wind Velocity at Mid Flame (wind): {Z.wind_ftmin} ft/min")
+        print(f"Slope Angle (slope_rad): {Z.slope_rad} radians")
+    
     # Parameters
     maxval= 0
-    if fuelload > 0:
-        
-        
-        anyFuel= {'SAVd10h_ft-1':109,'SAVd100h_ft-1':30, 'H_BTUlb':8000,'p_dens_lbft-3':32, 'tminer':0.0555,  'eminer':0.010}
-        F4  = {'CODE': 4, 'SorD': 'S', '1h_tac': 5.0, '10h_tac': 4.0, '100h_tac': 2.0, 'Lh_tac': 0, 'Lw_tbac': 5.0, 'SAVd1h_ft-1': 2, 'SAVldh_ft-1': 0, 'SAVlw_ft-1': '--', 'depth_ft': 1, 'dme_pc': 500, 'SAVcar_ft-1': 6.0, 'bulk_lbft3': 20, 'packratio': 1},
-        SH5 = {'CODE': 'SH5', 'SorD': 'S', '1h_tac': 3.6, '10h_tac': 2.1, '100h_tac': 0, 'Lh_tac': 0, 'Lw_tbac': 2.9, 'SAVd1h_ft-1': 750, 'SAVldh_ft-1': '--', 'SAVlw_ft-1': 1, 'depth_ft': 600, 'dme_pc': 6.0, 'SAVcar_ft-1': 15, 'bulk_lbft3': 1, 'packratio': 252},
-        SH7 = {'CODE': 'SH7', 'SorD': 'S', '1h_tac': 3.5, '10h_tac': 5.3, '100h_tac': 2.2, 'Lh_tac': 0, 'Lw_tbac': 3.4, 'SAVd1h_ft-1': 750, 'SAVldh_ft-1': 0, 'SAVlw_ft-1': 1, 'depth_ft': 600, 'dme_pc': 6.0, 'SAVcar_ft-1': 15, 'bulk_lbft3': 1.233, 'packratio': 0.11},
-        SH9 = {'CODE': 'SH9', 'SorD': 'D', '1h_tac': 4.5, '10h_tac': 2.45, '100h_tac': 0, 'Lh_tac': 1.55, 'Lw_tbac': 7.0, 'SAVd1h_ft-1': 750, 'SAVldh_ft-1': 1, 'SAVlw_ft-1': 800, 'depth_ft': 1, 'dme_pc': 500, 'SAVcar_ft-1': 4.4, 'bulk_lbft3': 40, 'packratio': 1}
-        #Figure 9—fuel moisture 1-hr 6 percent, 10-hr 7 percent, 100-hr 8 percent, live herbaceous 60 percent, and live woody 90 percent.
-        environment = {'wind_mph':0,'slope_deg':0,'md1h_r':0.06,'md10h_r':0.07,'md100h_r':0.08,'mdlh_r':0.6,'mdlw_r':0.9}
-         
-        
-        
-        wo = valueOf["1h_tac"] * 0.0459 # Ovendry fuel loading in (lb/ft^2). data in ton/ac
-        fd = valueOf["depth_ft"] # Fuel depth (ft)
-        wv = valueOf["wind_mph"] * 88# Wind velocity at midflame height (ft/minute) = 88 * mph
-        fpsa = valueOf["SAVcar_ft-1'"]  # Fuel Particle surface area to volume ratio (1/ft)
-        mf = valueOf["fuelmoisture_ratio"]  # Fuel particle moisture content
-        
-        # CODE , 1h_tac, 10h_tac,100h_tac,Lh_lbac,Lw_lbac,Ftype,SAVd1h_ft-1,SAVd10h_ft-1,SAVd100h_ft-1,depth_ft,Dme_pc,H_BTUlb
-        
-        h = 8000  # Fuel particle low heat content
-        pp = 32.  # Ovendry particle density
-        st = 0.0555  # Fuel particle mineral content
-        se = 0.010  # Fuel Particle effective mineral content
-        mois_ext = 0.12  # Moisture content of extinction or 0.3 if dead
-        
+    
+    if wo > 0:
+                
         #calculate slope as degrees
-        slope_rad = math.atan(slope)
-        slope_degrees = slope_rad / 0.0174533 #radians
         tan_slope = math.tan(slope_rad) #  in radians
         # Betas Packing ratio
         Beta_op = 3.348 * math.pow(fpsa, -0.8189)  # Optimum packing ratio
@@ -189,53 +236,9 @@ def RothermelAndrews2018(valueOf,fuelload, fueldepth, windspeed, slope, fuelmois
         FI = (384.0/fpsa)*RI*(R) ##Uses Reaction Intensity in BTU / ft/ min
         #FI = HA*R
         if (RI <= 0):
-            return (maxval, maxval, maxval)
-        return (R, RI, FI)
+            return {"ROS_ftmin":0, "PR_r":0, "FI_BTUftmin":0}
+        return {"ROS_ftmin":R, "PR_r":RI, "FI_BTUftmin":FI}
     else:
-        return (maxval, maxval, maxval)
+        return {"ROS_ftmin":0, "PR_r":0, "FI_BTUftmin":0}
 
 
-# Plot as to reproduce figure 9 in the paper Andrews 2018, fuels as tables page 31-35
-def test_plot():
-    
-     
-    anyFuel= {'SAVd10h_ft-1':109,'SAVd100h_ft-1':30, 'H_BTUlb':8000,'p_dens_lbft-3':32, 'tminer':0.0555,  'eminer':0.010}
-    F4  = {'CODE': 4, 'SorD': 'S', '1h_tac': 5.0, '10h_tac': 4.0, '100h_tac': 2.0, 'Lh_tac': 0, 'Lw_tbac': 5.0, 'SAVd1h_ft-1': 2, 'SAVldh_ft-1': 0, 'SAVlw_ft-1': '--', 'depth_ft': 1, 'dme_pc': 500, 'SAVcar_ft-1': 6.0, 'bulk_lbft3': 20, 'packratio': 1},
-    SH5 = {'CODE': 'SH5', 'SorD': 'S', '1h_tac': 3.6, '10h_tac': 2.1, '100h_tac': 0, 'Lh_tac': 0, 'Lw_tbac': 2.9, 'SAVd1h_ft-1': 750, 'SAVldh_ft-1': '--', 'SAVlw_ft-1': 1, 'depth_ft': 600, 'dme_pc': 6.0, 'SAVcar_ft-1': 15, 'bulk_lbft3': 1, 'packratio': 252},
-    SH7 = {'CODE': 'SH7', 'SorD': 'S', '1h_tac': 3.5, '10h_tac': 5.3, '100h_tac': 2.2, 'Lh_tac': 0, 'Lw_tbac': 3.4, 'SAVd1h_ft-1': 750, 'SAVldh_ft-1': 0, 'SAVlw_ft-1': 1, 'depth_ft': 600, 'dme_pc': 6.0, 'SAVcar_ft-1': 15, 'bulk_lbft3': 1.233, 'packratio': 0.11},
-    SH9 = {'CODE': 'SH9', 'SorD': 'D', '1h_tac': 4.5, '10h_tac': 2.45, '100h_tac': 0, 'Lh_tac': 1.55, 'Lw_tbac': 7.0, 'SAVd1h_ft-1': 750, 'SAVldh_ft-1': 1, 'SAVlw_ft-1': 800, 'depth_ft': 1, 'dme_pc': 500, 'SAVcar_ft-1': 4.4, 'bulk_lbft3': 40, 'packratio': 1}
-    #Figure 9—fuel moisture 1-hr 6 percent, 10-hr 7 percent, 100-hr 8 percent, live herbaceous 60 percent, and live woody 90 percent.
-    
-    environment = {'wind_mph':0,'slope_deg':0,'md1h_r':0.06,'md10h_r':0.07,'md100h_r':0.08,'mdlh_r':0.6,'mdlw_r':0.9}
-     
-    windInput = np.linspace(0, 20, 100) 
-        
-    
-    for i,val in enumerate(windInput):
-        pineNeedle["wind"]    = val
-        pineNeedle2["wind"]    = val
-        pineNeedle3["wind"]    = val
-        
-        wros01[i] =  Balbi2020(pineNeedle)
-        wros03[i] =  Balbi2020(pineNeedle2)
-        wros08[i] =  Balbi2020(pineNeedle3)
-     
-        
-     
-    fig, (ax1) = plt.subplots(1, 1, sharey=True)
-    ax1.grid(True)
-     
-    
-    line1 = ax1.plot(windInput,wros01, 'o',markersize=1, label=f'load {pineNeedle["Sigmad"]}')
-    line2 = ax1.plot(windInput,wros03,'o',markersize=1, label=f'load {pineNeedle2["Sigmad"]}')
-    line3 = ax1.plot(windInput,wros08, 'o',markersize=1,label=f'load {pineNeedle3["Sigmad"]}')
-     
-     
-     
-    ax1.set_ylabel('ROS')
-    fig.suptitle('Rothermel Andrews 2018 - ROS like fig. 9)
-    
-    ax1.legend()
-    plt.show()
-    
-test_plot()

@@ -19,42 +19,42 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-def Balbi2020(valueOf):
+def Balbi2020(Z):
     # Constants
  
     PI = math.pi
 
-   # Fuel Specific
-    lh = valueOf['e']
+
+    lh =  Z.fd_m
+    lrhov = Z.fuelDens_kgm3
+    lm = Z.mdOnDry1h_r
+    ls = Z.SAV1h_minv
+    lsigma = Z.fl1h_kgm2
+    lrhoa = Z.airDens_kgm3
+    lCp = Z.Cpf_JkgK
+    lTa = Z.Ta_degK
+    lTi = Z.Ti_degK
+    lDeltah = Z.hEvap
+    lDeltaH = Z.H
+    lr00 = Z.r00
+    ltau0 = Z.Tau0_spm
+    Tvap = Z.Tvap_degK
+    Cpa =  Z.Cpa_JkgK
+    K1 = Z.K1_spm
+    st = Z.st_r
+    B = Z.B
+    lg = Z.g
+    lChi0 = Z.X0
+    
     if lh <= 0:
         return 0
-    lrhov = valueOf['Rhod']
-    lm = valueOf['Md']
-    ls = valueOf['sd']
-    lsigma = valueOf['Sigmad']
-    lrhoa = valueOf['RhoA']
-    lCp = valueOf['Cpv']
-    lTa = valueOf['Ta']
-    lTi = valueOf['Ti']
-    lDeltah = valueOf['Deltah']
-    lDeltaH = valueOf['DeltaH']
-    lr00 = valueOf['r00']
-    ltau0 = valueOf['Tau0']
-    Tvap = valueOf["Tvap"] = 373 # nomenclature
-    Cpa =  valueOf["Cpa"] = 1150 # nomenclature
-    K1 = valueOf["K1"] = 130 # nomenclature
-    st = valueOf["st"] = 17 # nomenclature
-    B = valueOf["B"] = 5.6e-8 # nomenclature
-    lg = valueOf["g"] = 9.81 # nomenclature
-    lChi0 = valueOf['X0']
-    
     
     lU = 0
-    RU = valueOf['wind']
+    RU = Z.wind_mps
     if RU > 0:
         lU = RU
 
-    lalpha = math.atan(valueOf['slope'])
+    lalpha = math.atan(Z.slope_rad)
 
     R = 0.1  # first guess in iteration
     Rnew = 0
@@ -111,11 +111,10 @@ def Balbi2020(valueOf):
 			
         stopcondition = (abs(error) > maxEps);
 	
-    if (flag==1):        
-        return Rnew
-    
-    print(f"no convergence in {N} steps, error is {error}")
-    return Rnew
+    if (flag is not 1):    
+        print(f"no convergence in {N} steps for Balbi, error is {error}, returning ROS")
+        
+    return {"ROS_mps":Rnew, "FllH_m":H}
 
 # Plot as to reproduce figure 3 an 4 in the paper Balbi 2020
 def test_plot():

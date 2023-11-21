@@ -22,40 +22,6 @@ License: GPL
 
 """
 
-fuel_properties = {
-    "CODE": "a shortname - code",
-    "INDEX": "an integer used as classification number",
-    "fl1h": "Ovendry 1h fuel load",
-    "fl10h": "Ovendry 10h fuel load",
-    "fl100h": "Ovendry 100h fuel load",
-    "flLherb": "live herbaceous load",
-    "flLwood": "live woody load",
-    "ftype": "S for static, D for dynamic, N for Non applicable",
-    "SAV1h": "Surface-area-to-volume ratio for 1h fuel",
-    "SAV10h": "Surface-area-to-volume ratio for 10h fuel",
-    "SAV100h": "Surface-area-to-volume ratio for 100h fuel",
-    "SAVLDherb": "Surface-area-to-volume ratio for live and dead herbaceous",
-    "SAVLwood": "Surface-area-to-volume ratio for live woody",
-    "fd": "fuel bed depth",
-    "SAVcar": "Characteristic SAV",
-    "Dme": "dead fuel moisture of extinction",
-    "H": "Heat content",
-    "bulkDens": "bulk density",
-    "packRatio": "relative packing ratio",
-    "fuelDens": "Ovendry fuel particle density",
-    "totMineral": "Total fuel particle mineral relative content",
-    "effectMineral": "effective (silica-free) mineral relative content",
-    "wind": "wind speed at midflame height",
-    "slope": "slope angle",
-    "mdOnDry1h": "1 hour fuel moisture expressed as ratio on dry mass basis",
-    "mdOnDry10h": "10 hour fuel moisture expressed as ratio on dry mass basis",
-    "mdOnDry100h": "100 hour fuel moisture expressed as ratio on dry mass basis",
-    "mdOnTotal1h": "1 hour fuel moisture expressed as ratio on total mass basis",
-    "mdOnTotal10h": "10 hour fuel moisture expressed as ratio on total mass basis",
-    "mdOnTotal100h": "100 hour fuel moisture expressed as ratio on total mass basis",
-    "mdOnDryLHerb": "live herbaceous fuel moisture expressed as ratio on total mass basis",
-    "mdOnDryLWood": "live woody fuel moisture expressed as ratio on total mass basis"
-}
 
 # from Andrews and Rothermel 2017 
 AR2017_table_csv = """
@@ -68,6 +34,9 @@ SH9,D,4.5,2.45,0,1.55,7.0,750,1800,1500,4.4,40,1378,0.16,0.56"""
 AR2017_anyfueltable_csv = """SAV10h_ftinv,SAV100h_ftinv,H_BTUlb,fuelDens_lbft3,totMineral_r,effectMineral_r
 109,30,8000,32,0.0555,0.01
 """
+
+pineNeedlesBalbi2020_csv = """CODE,Ta_degK,Ti_degK,Tvap_degK,Tau0_spm,hEvap_Jkg,H_Jkg,Cpf_JkgK,Cpa_JkgK,X0,K1_spm,st_r,r00,B,g,fl1h_kgm2,SAV1h_minv,fd_m,mdOnDry1h_r,fuelDens_kgm3,airDens_kgm3
+PN1,300,600,373,75591,2300000.0,17400000.0,2030,1150,0.3,130,17,2.5e-05,5.6e-08,9.81,0.078,6000,0.1,0.1,500,1.225"""
 
 
 # values as in table 7 in  Scott&Burgan 2005. but they differ from the text values
@@ -114,20 +83,10 @@ SB3,5.50,2.75,3.00,0.00,0.00,N/A,2000,9999,9999,1.2,25,8000
 SB4,5.25,3.50,5.25,0.00,0.00,N/A,2000,9999,9999,2.7,25,8000 """
 
 
-
-#Figure 9—fuel moisture 1-hr 6 percent, 10-hr 7 percent, 100-hr 8 percent, live herbaceous 60 percent, and live woody 90 percent.
-
-#A4  = {'CODE': 'A4', 'SorD': 'S', '1h_tac': 5.0, '10h_tac': 4.0, '100h_tac': 2.0, 'Lh_tac': 0, 'Lw_tbac': 5.0, 'SAVd1h_ft-1': 2, 'SAVldh_ft-1': 0, 'SAVlw_ft-1': '--', 'depth_ft': 1, 'dme_pc': 500, 'SAVcar_ft-1': 6.0, 'bulk_lbft3': 20, 'packratio': 1}
-#FP7  = {'CODE': 'FP7', 'SorD': 'S', '1h_lbft2': 2.0, '10h_tac': 4.0, '100h_tac': 2.0, 'Lh_tac': 0, 'Lw_tbac': 5.0, 'SAVd1h_ft-1': 2, 'SAVldh_ft-1': 0, 'SAVlw_ft-1': '--', 'depth_ft': 1, 'dme_pc': 500, 'SAVcar_ft-1': 6.0, 'bulk_lbft3': 20, 'packratio': 1}
-
-
-
-
-
-
 import csv
 import io
-from .model_set import model_parameters
+from .model_set import *
+
 
 def to_csv(dicts):
     if not dicts:

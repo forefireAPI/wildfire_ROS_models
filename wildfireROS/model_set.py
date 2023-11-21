@@ -163,4 +163,3 @@ def test():
     print("load", a4_params.load_lbft2, a4_params.load_kgm2, a4_params.load_tac)
 
     
-test()

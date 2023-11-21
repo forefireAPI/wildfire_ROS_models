@@ -48,7 +48,7 @@ for fm in A2017:
     ros_values = []
     for wind_speed in wind_speeds:
         fm.wind_miph = wind_speed
-        rset = model_parameters(Rothermel.RothermelAndrews2018(fm))
+        rset = model_parameters(Rothermel.Rothermel1972(fm))
         ros_values.append(rset.ROS_ftmin)
         
 

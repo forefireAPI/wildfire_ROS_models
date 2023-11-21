@@ -26,49 +26,23 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-def rothev2(valueOf):
-    # Constants
- 
-    PI = math.pi
+def Rothermel1972(Z, print_calculus = False):
+  
+    
+    sa_vol_ratio = Z.SAVcar_ftinv   # Fuel Particle surface area to volume ratio (1/ft)
+    fuel_load = Z.fl1h_lbft2 # Ovendry fuel loading 
+    bed_depth = Z.fd_ft # Fuel depth (ft)
+    dead_extinction_moisture = Z.Dme_r  # Moisture content of extinction
+    moisture_content = Z.mdOnDry1h_r   # Fuel particle moisture content
+    wind = Z.wind_ftmin # wind velocity at mid flame
+    slope  = Z.slope_rad # slope angle 
+    heat_content = Z.H_BTUlb  # Fuel particle low heat content
+    mineral_content = Z.totMineral_r  # Fuel Particle effective mineral content
+    effective_mineral_content= Z.effectMineral_r  # Fuel Particle effective mineral content
+    particle_density = Z.fuelDens_lbft3  # Ovendry particle density
 
-   # Fuel Specific
-    lh = valueOf['e']
-    if lh <= 0:
-        return 0
-    lrhov = valueOf['Rhod']
-    lm = valueOf['Md']
-    ls = valueOf['sd']
-    lsigma = valueOf['Sigmad']
-    lrhoa = valueOf['RhoA']
-    lCp = valueOf['Cpv']
-    lTa = valueOf['Ta']
-    lTi = valueOf['Ti']
-    lDeltah = valueOf['Deltah']
-    lDeltaH = valueOf['DeltaH']
-    lr00 = valueOf['r00']
-    ltau0 = valueOf['Tau0']
-    Tvap = valueOf["Tvap"] = 373 # nomenclature
-    Cpa =  valueOf["Cpa"] = 1150 # nomenclature
-    K1 = valueOf["K1"] = 130 # nomenclature
-    st = valueOf["st"] = 17 # nomenclature
-    B = valueOf["B"] = 5.6e-8 # nomenclature
-    lg = valueOf["g"] = 9.81 # nomenclature
-    lChi0 = valueOf['X0']
-    
-    
-    
-    sa_vol_ratio, 
-    fuel_load, 
-    bed_depth, 
-    dead_extinction_moisture, 
-    moisture_content, 
-    wind, 
-    tan_slope,
-    heat_content = 8000, 
-    mineral_content = .0555,
-    effective_mineral_content = .010, 
-    particle_density = 32
 
+    tan_slope = math.tan(slope) #  in radians
     preignition = 250 + 1116 * moisture_content
 
     heating_number = np.exp(-138 / sa_vol_ratio)
@@ -84,7 +58,7 @@ def rothev2(valueOf):
     E = .715 * np.exp(sa_vol_ratio * -3.59e-4)
     wind_factor = C * wind**B * (packing_ratio / optimal_packing) ** E
 
-    propegating_flux = (192 +.2595 * sa_vol_ratio) **-1 * np.exp((.792 + .681 * sa_vol_ratio ** .5) * (packing_ratio + .1))
+    propagating_flux = (192 +.2595 * sa_vol_ratio) **-1 * np.exp((.792 + .681 * sa_vol_ratio ** .5) * (packing_ratio + .1))
 
     mineral_dampening = min(1.0, .174 * effective_mineral_content**-.19)
 
@@ -101,9 +75,9 @@ def rothev2(valueOf):
 
     reaction_intensity = optimal_reaction * net_fuel_load * heat_content * moisture_dampening * mineral_dampening
 
-    rate_of_spread = reaction_intensity * propegating_flux * (1 + wind_factor + slope_factor) / (bulk_density * heating_number * preignition)
+    rate_of_spread = reaction_intensity * propagating_flux * (1 + wind_factor + slope_factor) / (bulk_density * heating_number * preignition)
 
-    return rate_of_spread
+    return {"ROS_ftmin":rate_of_spread, "PR_r":propagating_flux, "FI_BTUftmin":reaction_intensity}
 
 
 
@@ -185,7 +159,6 @@ def RothermelAndrews2018(Z, print_calculus = False):
     
     if wo > 0:
                 
-        #calculate slope as degrees
         tan_slope = math.tan(slope_rad) #  in radians
         # Betas Packing ratio
         Beta_op = 3.348 * math.pow(fpsa, -0.8189)  # Optimum packing ratio

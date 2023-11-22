@@ -81,47 +81,6 @@ def Rothermel1972(Z, print_calculus = False):
 
 
 
-
-
-
-fuel_properties = {
-    "CODE": "a shortname - code",
-    "INDEX": "an integer used as classification number",
-    "fl1h": "Ovendry 1h fuel load",
-    "fl10h": "Ovendry 10h fuel load",
-    "fl100h": "Ovendry 100h fuel load",
-    "flLherb": "live herbaceous load",
-    "flLwood": "live woody load",
-    "ftype": "S for static, D for dynamic, N for Non applicable",
-    "SAV1h": "Surface-area-to-volume ratio for 1h fuel",
-    "SAV10h": "Surface-area-to-volume ratio for 10h fuel",
-    "SAV100h": "Surface-area-to-volume ratio for 100h fuel",
-    "SAVLDherb": "Surface-area-to-volume ratio for live and dead herbaceous",
-    "SAVLwood": "Surface-area-to-volume ratio for live woody",
-    "fd": "fuel bed depth",
-    "SAVcar": "Characteristic SAV",
-    "Dme": "dead fuel moisture of extinction",
-    "H": "Heat content",
-    "bulkDens": "bulk density",
-    "packRatio": "relative packing ratio",
-    "fuelDens": "Ovendry fuel particle density",
-    "totMineral": "Total fuel particle mineral relative content",
-    "effectMineral": "effective (silica-free) mineral relative content",
-    "wind": "wind speed",
-    "slope": "slope angle",
-    "mdOnDry1h": "1 hour fuel moisture expressed as ratio on dry mass basis",
-    "mdOnDry10h": "10 hour fuel moisture expressed as ratio on dry mass basis",
-    "mdOnDry100h": "100 hour fuel moisture expressed as ratio on dry mass basis",
-    "mdOnTotal1h": "1 hour fuel moisture expressed as ratio on total mass basis",
-    "mdOnTotal10h": "10 hour fuel moisture expressed as ratio on total mass basis",
-    "mdOnTotal100h": "100 hour fuel moisture expressed as ratio on total mass basis",
-    "mdOnDryLHerb": "live herbaceous fuel moisture expressed as ratio on total mass basis",
-    "mdOnDryLWood": "live woody fuel moisture expressed as ratio on total mass basis"
-}
-
-
-
-
 def RothermelAndrews2018(Z, print_calculus = False):
     
     # input requirements

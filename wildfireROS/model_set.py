@@ -12,7 +12,7 @@ License: GPL
 
 """
 import math
-
+import numpy as np
 
 fuel_properties = {
     "CODE": "shortname - code",
@@ -125,7 +125,7 @@ convert_metric = {
     'minv': 1,               # meters^-1 dimentionless surface area ration in m2/m3
     'kg': 1,               # kilogram
     'kJkg' : 1,           # kiloJoule per kilogram
-    'Jkg' : 1000,           # Joule per kilogram
+    'Jkg' : 0.001,           # Joule per kilogram
     'mps': 1,               # meters per seconds
     'spm': 1,               # seconds per meter
     'JkgK': 1,
@@ -179,9 +179,11 @@ class model_parameters:
       
     def __init__(self, params=None):
         # Conversion factors
-  
-        self.to_metric = {unit: lambda x, factor=factor: x * factor for unit, factor in convert_metric.items()}
-        self.from_metric = {unit: lambda x, factor=factor: x / factor for unit, factor in convert_metric.items()}
+        self.to_metric = {unit: lambda x, factor=factor: np.multiply(x, factor) for unit, factor in convert_metric.items()}
+        self.from_metric = {unit: lambda x, factor=factor: np.divide(x, factor) for unit, factor in convert_metric.items()}
+      
+       # self.to_metric = {unit: lambda x, factor=factor: x * factor for unit, factor in convert_metric.items()}
+       # self.from_metric = {unit: lambda x, factor=factor: x / factor for unit, factor in convert_metric.items()}
         self.metric_params = {}
         self.load(params)
 
@@ -251,7 +253,7 @@ class model_parameters:
         # Add parameters from the second instance (other), with a warning if already defined
         for key, value in other.metric_params.items():
             if key in result.metric_params:
-                warnings.warn(f"Parameter '{key}' redefined. Keeping the first value.")
+                print(f"Parameter '{key}' redefined. Keeping the first value.")
             else:
                 result.metric_params[key] = value
     

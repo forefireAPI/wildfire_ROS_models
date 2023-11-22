@@ -21,8 +21,6 @@ ROS_models = {
     "Balbi2020": Balbi2020
 }
 
-
-
 def run_model(ROS_model_name, fuel_model, param_name, values_range):
     
     out_values = []
@@ -35,26 +33,43 @@ def run_model(ROS_model_name, fuel_model, param_name, values_range):
         setattr(rset, param_name, value)
         out_values.append(rset)
         
+    # retrun to initial value
     setattr(fuel_model, param_name, initial_value)
+    
+    if len(out_values) == 0:
+        return {}
+    
+    keys = out_values[0].keys()
+    
+    for item in out_values:
+        keys = out_values[0].keys()
+    
+    result_arrays = {}
+    
+    for key in keys:
+        result_arrays[key] = []
+
+    for result in out_values:
+        for key in keys:
+            result_arrays[key].append(result[key])
+
+    
+
     return {"Model" :ROS_model_name,
             "FUELCODE" : fuel_model.CODE,
-            "results" : out_values
+            "results" : model_parameters({key: np.array(result_arrays[key]) for key in keys})
             }
 
-
-
-def plot_results(resultSets, keyX, keyY):
-    
+def plot_results(resultSets, keyX, keyY):    
     plt.figure(figsize=(10, 6))
      
     for entry in resultSets:
-        X_values = [result[keyX] for result in entry['results']]
-        Y_values = [result[keyY] for result in entry['results']]
-        
-        plt.plot(X_values,Y_values, label=f"{entry['Model']} {entry['FUELCODE']}")
+        plt.plot(entry['results'][keyX],entry['results'][keyY], label=f"{entry['Model']} {entry['FUELCODE']}")
     
     plt.xlabel(model_parameters.str_full_name(keyX))
     plt.ylabel(model_parameters.str_full_name(keyY))
     
     plt.legend()
     plt.grid(True)
+
+

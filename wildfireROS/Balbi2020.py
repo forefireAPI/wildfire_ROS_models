@@ -19,11 +19,12 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-def Balbi2020(Z):
+ 
+from .model_set import *
+def Balbi2020(Z, print_calculus = False):
     # Constants
  
     PI = math.pi
-
 
     lh =  Z.fd_m
     lrhov = Z.fuelDens_kgm3
@@ -34,8 +35,8 @@ def Balbi2020(Z):
     lCp = Z.Cpf_JkgK
     lTa = Z.Ta_degK
     lTi = Z.Ti_degK
-    lDeltah = Z.hEvap
-    lDeltaH = Z.H
+    lDeltah = Z.hEvap_Jkg
+    lDeltaH = Z.H_Jkg
     lr00 = Z.r00
     ltau0 = Z.Tau0_spm
     Tvap = Z.Tvap_degK
@@ -111,121 +112,10 @@ def Balbi2020(Z):
 			
         stopcondition = (abs(error) > maxEps);
 	
-    if (flag is not 1):    
+    if (flag != 1):    
         print(f"no convergence in {N} steps for Balbi, error is {error}, returning ROS")
         
     return {"ROS_mps":Rnew, "FllH_m":H}
 
-# Plot as to reproduce figure 3 an 4 in the paper Balbi 2020
-def test_plot():
-    anyFuel = {}
-    
-    anyFuel["Ta"]  = 300 # nomenclature
-    anyFuel["Ti"]  = 600 # nomenclature
-    anyFuel["Tvap"] = 373 # nomenclature
-    anyFuel["Tau0"]  = 75591 # nomenclature
-    anyFuel["Deltah"]   = 2.3e6 # nomenclature
-    anyFuel["DeltaH"] = 1.74e7 # nomenclature
-    anyFuel["Cpv"] = 4180 # nomenclature
-    anyFuel["Cpa"] = 1150 # nomenclature
-    anyFuel["X0"] = 0.3 # nomenclature
-    anyFuel["K1"] = 130 # nomenclature
-    anyFuel["st"] = 17 # nomenclature
-    anyFuel["r00"] = 2.5e-5 # nomenclature
-    anyFuel["B"] = 5.6e-8 # nomenclature
-    anyFuel["g"] = 9.81 # nomenclature
     
     
-    
-    pineNeedle = dict(anyFuel)
-    pineNeedle["Sigmad"] = 0.078 #0.05 in table. 2.. but no convergence
-    pineNeedle["sd"]  = 6000 #table. 2
-    pineNeedle["e"]   = 0.1 #table. 2
-    pineNeedle["Md"]  = 0.1 #table. 2 but in ratio as in table 4 
-    pineNeedle["Rhod"]  =  500 # in kg/m3 Fuel density pine needle as table. 2
-    pineNeedle["RhoA"]  = 1.225 # air density sea level
-    pineNeedle["Cpv"]    = 2030 # pine needles top left page 8
-    
-    pineNeedle["wind"]    = 0
-    pineNeedle["slope"]    = 0
-        
-    pineNeedle2 = dict(pineNeedle)
-    pineNeedle2["Sigmad"] = 0.3 #table. 2
-    pineNeedle3 = dict(pineNeedle)
-    pineNeedle3["Sigmad"] = 0.8 #table. 2
-    
-    windInput = np.linspace(0, 10, int(10/0.4)+1) 
-    fmcInput = np.linspace(0.05, 0.9, int((0.9-0.05)/0.05)+1) 
-    
-    wros01 = np.ones(np.shape(windInput))
-    wros03 = np.ones(np.shape(windInput))
-    wros08 = np.ones(np.shape(windInput))
-    
-    
-    fmcW02 = np.ones(np.shape(fmcInput))
-    fmcW8 = np.ones(np.shape(fmcInput))
-    
-    for i,val in enumerate(windInput):
-        pineNeedle["wind"]    = val
-        pineNeedle2["wind"]    = val
-        pineNeedle3["wind"]    = val
-        
-        wros01[i] =  Balbi2020(pineNeedle)
-        wros03[i] =  Balbi2020(pineNeedle2)
-        wros08[i] =  Balbi2020(pineNeedle3)
-    
-    
-    pineNeedleW = dict(pineNeedle)
-    pineNeedleW2 = dict(pineNeedleW) 
-    
-    pineNeedleW["wind"]    = 0.2
-    pineNeedleW2["wind"]    = 8
-
-    #varying fmc
-    pineNeedleW["Sigmad"] = 0.9 #table. 2
-    pineNeedleW2["Sigmad"] = 0.9 #table. 2
-    
-    pineNeedleW["Md"]    = 0
-    pineNeedleW2["Md"]    = 0  
-    fmc0RosW02 = Balbi2020(pineNeedleW)
-    fmc0RosW8 = Balbi2020(pineNeedleW2)
-    
-
-    for i,val in enumerate(fmcInput):
-        pineNeedleW["Md"]    = val
-        pineNeedleW2["Md"]    = val 
-        fmcW02[i] =  Balbi2020(pineNeedleW)/fmc0RosW02
-        fmcW8[i] =  Balbi2020(pineNeedleW2)/fmc0RosW8
-        
-     
-    fig, (ax1,ax2) = plt.subplots(2, 1, sharey=False)
-    ax1.grid(True)
-    ax2.grid(True)
-    
-    line1 = ax1.plot(windInput,wros01, 'bs',markersize=4, label=f'load {pineNeedle["Sigmad"]}')
-    line2 = ax1.plot(windInput,wros03,'ro',markersize=4, label=f'load {pineNeedle2["Sigmad"]}')
-    line3 = ax1.plot(windInput,wros08, 'gv',markersize=4,label=f'load {pineNeedle3["Sigmad"]}')
-    
-    line4 = ax2.plot(fmcInput,fmcW02, 'rv',markersize=4 )
-    line5 = ax2.plot(fmcInput,fmcW8,'bo',markersize=4 )
-  
-     
-     
-    ax1.set_ylabel('ROS')
-    
-    fig.suptitle('Balbi 2020 - like fig. 3 and 4')
-   
-    ax2.set_ylabel('ROS')
-    
-   
-    
-    ax1.legend()
-    plt.show()
-    
-    
-    
-    
-    
-    
-    
-#test_plot()

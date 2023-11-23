@@ -1,0 +1,99 @@
+
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Comprehensive Python Library for Wildfire Rate of Spread Model}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\begin{abstract}
+This work introduces a comprehensive Python library aimed at the standardization and implementation of wildfire Rate of Spread (ROS) models. The library is designed to offer researchers and practitioners a reference open source code for exploring and applying various ROS and fuel models, enhancing the reproducibility of research and facilitating practical applications in wildfire management.
+
+The library features individual files for renowned ROS models, all referenced. Each of these files is linked to a specific publication and serves as a reference implementation. They are designed to accurately reproduce the results and figures from their respective source articles for comparison and analysis.
+
+Complementing the ROS models, the library includes files for a range of fuel models library, such as those proposed by Andersen and Scott and Burgham. These implementations are structured to align with the ROS models, ensuring uniformity and comparison across different types of wildfire scenarios.
+
+The library also offers a suite of tools and methods for testing and intercomparing ROS and fuel models as well as to perform sensitivity analysis. Users can adjust variables like wind speed, slope, fuel load, humidity, and all characterisitc parameters to generate and plot results.
+
+The library also introduces a generic approach for training neural networks to emulate these ROS models. This method leverages advancements in machine learning to create efficient model emulators that may be fine-tuned with observational data.
+
+The library also includes functionality to test and compare the computational efficiency of the different model formulations, as well as emulators.
+
+Library also aims at incorporating test datasets for the calibration and validation of models, grounding them in real-world observations.
+
+A code generator is also integrated into the library, allowing for the export of these ROS and fuel models to fire behavior simulation code such as ForeFire in order to perform 2D surfaciv simulation using same models. 
+
+Finally the library also includes this LaTeX file that dynamically documents models and their implementations. This file includes detailed descriptions that must be includen in python model files description and automatically generated figures, ensuring that the documentation remains up-to-date as new models or updates are added to the library.
+
+\end{abstract}
+
+\section{Introduction}
+% Brief overview of the library's purpose, significance in wildfire research and reproductibility
+
+\section{ROS Model Implementations}
+\subsection{Model Structure}
+% Description of the overall structure of the ROS model implementations.
+
+\subsection{Case Studies: Balbi and Rothermel Models}
+% Detailed discussion on specific implementations, e.g., Balbi.py, Rothermel.py... 
+
+\subsection{Adding new models}
+% Detailed discussion on how to add models
+
+\section{Fuel Model Implementations}
+% Overview of the fuel model implementations in the library, like SB2005.. others... importance and structure.
+
+\section{Testing and Intercomparison Tools}
+\subsection{Variable Adjustments}
+% Description of how users can adjust variables like wind, slope, etc.
+\subsection{Comparative Analysis}
+% Tools available for comparative analysis of models.
+
+\section{Neural Network Emulator for ROS Models}
+% Simple method exposed to train neural networks to emulate ROS models and its significance..
+
+\section{Computational Efficiency}
+% Tests of computational efficiency .. if relevant, all models and emulator
+
+\section{Code Generation and Model Export}
+% Code generation feature for exporting models to simulation platforms.
+
+\section{Empirical Data Integration}
+% Empirical datasets used for model validation and comparisons.
+
+\section{Dynamic Documentation with LaTeX}
+% this LaTeX documentation updates automatically with model descriptions and figures.
+% structure and content of the dynamic documentation.
+
+\section{Conclusion and Future Work}
+% key findings, contributions of the library, areas for future development.
+
+
+% Start of the bibliography
+\begin{thebibliography}{9}
+\bibitem{rosmodel1} 
+Author Name. 
+\textit{Title of the ROS Model Publication}. 
+Journal/Conference, Year.
+
+\bibitem{fuelmodel1} 
+Author Name. 
+\textit{Title of the Fuel Model Publication}. 
+Journal/Conference, Year.
+
+
+\end{thebibliography}
+
+
+
+\end{document}
+
+
+
+\end{document}

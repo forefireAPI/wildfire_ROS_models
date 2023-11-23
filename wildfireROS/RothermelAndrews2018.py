@@ -35,7 +35,7 @@ def Rothermel1972(Z, print_calculus = False):
     dead_extinction_moisture = Z.Dme_r  # Moisture content of extinction
     moisture_content = Z.mdOnDry1h_r   # Fuel particle moisture content
     wind = Z.wind_ftmin # wind velocity at mid flame
-    slope  = Z.slope_rad # slope angle 
+    slope  = math.radians(Z.slope_deg) # slope angle 
     heat_content = Z.H_BTUlb  # Fuel particle low heat content
     mineral_content = Z.totMineral_r  # Fuel Particle effective mineral content
     effective_mineral_content= Z.effectMineral_r  # Fuel Particle effective mineral content
@@ -96,7 +96,7 @@ def RothermelAndrews2018(Z, print_calculus = False):
     se = Z.effectMineral_r  # Fuel Particle effective mineral content
     mois_ext = Z.Dme_r  # Moisture content of extinction
     wind = Z.wind_ftmin # wind velocity at mid flame
-    slope_rad = Z.slope_rad # slope angle 
+    slope_rad = math.radians(Z.slope_deg) # slope angle 
     
     if(print_calculus):
         print("Rothermel model such as Andrews and Rothermel 2017")

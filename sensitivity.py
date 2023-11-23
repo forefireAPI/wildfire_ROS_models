@@ -10,6 +10,9 @@ helper functions to perform and plot sensitivity analysis
 
 from SALib.sample import saltelli
 from SALib.analyze import sobol
+from SALib.sample import sobol as sobolsample
+from SALib.sample import latin as latinsample
+
 from wildfireROS import fuels_database as fdb
 from wildfireROS.runROS import *
 from wildfireROS.model_set import model_parameters
@@ -81,7 +84,8 @@ model_name = "Balbi2020"
 
 
 
-param_values = saltelli.sample(problem, 1000)
+param_values = sobolsample.sample(problem, 1000)
+#param_values = saltelli.sample(problem, 1000)
 
 
 # Empty list to hold model results

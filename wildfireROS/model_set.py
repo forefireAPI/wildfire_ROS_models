@@ -14,60 +14,92 @@ License: GPL
 import math
 import numpy as np
 
+look_at = {'Ta': [294.0, 306.0],
+         'Ti': [588.0, 612.0],
+         'Tvap': [365.54, 380.46],
+         'Tau0': [74079.18, 77102.82],
+         'hEvap': [2254.0, 2346.0],
+         'H': [17052.0, 17748.0],
+         'Cpf': [1989.4, 2070.6],
+         'Cpa': [1127.0, 1173.0],
+         'X0': [0.294, 0.306],
+         'st': [16.66, 17.34],
+         'fl1h': [0.392, 0.40800000000000003],
+         'SAV1h': [5880.0, 6120.0],
+         'fd': [0.098, 0.10200000000000001],
+         'mdOnDry1h': [0.098, 0.10200000000000001],
+         'fuelDens': [490.0, 510.0],
+         'airDens': [1.2005000000000001, 1.2495],
+         'wind': [1.96, 2.04],
+         'slope_deg': [0, 0.001]
+    }
+ 
+   
 fuel_properties = {
-    "CODE": "shortname - code",
-    "INDEX": "integer used as classification number",
-    "fl1h": "Ovendry 1h fuel load",
-    "fl10h": "Ovendry 10h fuel load",
-    "fl100h": "Ovendry 100h fuel load",
-    "flLherb": "live herbaceous load",
-    "flLwood": "live woody load",
-    "ftype": "S for static, D for dynamic, N for Non applicable",
-    "SAV1h": "Surface-area-to-volume ratio for 1h fuel",
-    "SAV10h": "Surface-area-to-volume ratio for 10h fuel",
-    "SAV100h": "Surface-area-to-volume ratio for 100h fuel",
-    "SAVLDherb": "Surface-area-to-volume ratio for live and dead herbaceous",
-    "SAVLwood": "Surface-area-to-volume ratio for live woody",
-    "fd": "fuel bed depth",
-    "SAVcar": "Characteristic SAV",
-    "Dme": "dead fuel moisture of extinction",
-    "H": "Heat content",
-    "bulkDens": "bulk density",
-    "packRatio": "relative packing ratio",
-    "fuelDens": "Ovendry fuel particle density",
-    "totMineral": "Total fuel particle mineral relative content",
-    "effectMineral": "effective (silica-free) mineral relative content",
-    "wind": "wind speed at midflame height",
-    "slope": "slope angle",
-    "mdOnDry1h": "1 hour fuel moisture expressed as ratio on dry mass basis",
-    "mdOnDry10h": "10 hour fuel moisture expressed as ratio on dry mass basis",
-    "mdOnDry100h": "100 hour fuel moisture expressed as ratio on dry mass basis",
-    "mdOnTotal1h": "1 hour fuel moisture expressed as ratio on total mass basis",
-    "mdOnTotal10h": "10 hour fuel moisture expressed as ratio on total mass basis",
-    "mdOnTotal100h": "100 hour fuel moisture expressed as ratio on total mass basis",
-    "mdOnDryLHerb": "live herbaceous fuel moisture expressed as ratio on total mass basis",
-    "mdOnDryLWood": "live woody fuel moisture expressed as ratio on total mass basis",
-    ## Parameters for Balbi models
-    'Ta' : "Ambient temperature ",
-    'Ti'  : "Ignition temperature ",
-    'Tvap'  : "Vaporisation temperature",
-    'Tau0'  : "Flame residence time parameter ",
-    'hEvap'  : "Heat of latent evaporation",
-    'Cpf'  : "Specific heat of fuel",
-    'Cpa'  : "Specific heat of air ",
-    'X0'  : "Radiative factor",
-    'K1'  : "Drag coefficient",
-    'st'  : "Air–pyrolysis gas mass ratio in the flame body",
-    'r00'  : "Model coefficient",
-    'B'  : "Stefan–Boltzmann constant",
-    'g'  : "Acceleration due to gravity", 
-    'airDens'  : "Air density ",
+    "CODE": {"long_name": "Shortname - code", "range": None, "SI_unit": None},
+    "INDEX": {"long_name": "Integer used as classification number", "range": None, "SI_unit": None},
+    
+    # Fuel Characteristic Parameters
+    "ftype": {"long_name": "S for static, D for dynamic, N for Non applicable", "range": None, "SI_unit": None},
+    "SAV1h": {"long_name": "Surface-area-to-volume ratio for 1h fuel", "range": None, "SI_unit": None},
+    "SAV10h": {"long_name": "Surface-area-to-volume ratio for 10h fuel", "range": None, "SI_unit": None},
+    "SAV100h": {"long_name": "Surface-area-to-volume ratio for 100h fuel", "range": None, "SI_unit": None},
+    "SAVLDherb": {"long_name": "Surface-area-to-volume ratio for live and dead herbaceous", "range": None, "SI_unit": None},
+    "SAVLwood": {"long_name": "Surface-area-to-volume ratio for live woody", "range": None, "SI_unit": None},
+    "SAVcar": {"long_name": "Characteristic SAV", "range": None, "SI_unit": None},
+    "fd": {"long_name": "Fuel bed depth", "range": None, "SI_unit": None},
+    
+    # Fuel State parameter
+    "fl1h": {"long_name": "Ovendry 1h fuel load", "range": None, "SI_unit": None},
+    "fl10h": {"long_name": "Ovendry 10h fuel load", "range": None, "SI_unit": None},
+    "fl100h": {"long_name": "Ovendry 100h fuel load", "range": None, "SI_unit": None},
+    "flLherb": {"long_name": "Live herbaceous load", "range": None, "SI_unit": None},
+    "flLwood": {"long_name": "Live woody load", "range": None, "SI_unit": None},
+
+    "Dme": {"long_name": "Dead fuel moisture of extinction", "range": None, "SI_unit": None},
+    "H": {"long_name": "Heat content", "range": None, "SI_unit": None},
+    "bulkDens": {"long_name": "Bulk density", "range": None, "SI_unit": None},
+    "packRatio": {"long_name": "Relative packing ratio", "range": None, "SI_unit": None},
+    "fuelDens": {"long_name": "Ovendry fuel particle density", "range": None, "SI_unit": None},
+    
+    # Model Parameters
+    "totMineral": {"long_name": "Total fuel particle mineral relative content", "range": None, "SI_unit": None},
+    "effectMineral": {"long_name": "Effective (silica-free) mineral relative content", "range": None, "SI_unit": None},
+    
+    # Environment parameters
+    "wind": {"long_name": "Wind speed at midflame height", "range": None, "SI_unit": None},
+    "slope": {"long_name": "Slope angle", "range": None, "SI_unit": None},
+    "mdOnDry1h": {"long_name": "1 hour fuel moisture expressed as ratio on dry mass basis", "range": None, "SI_unit": None},
+    "mdOnDry10h": {"long_name": "10 hour fuel moisture expressed as ratio on dry mass basis", "range": None, "SI_unit": None},
+    "mdOnDry100h": {"long_name": "100 hour fuel moisture expressed as ratio on dry mass basis", "range": None, "SI_unit": None},
+    "mdOnTotal1h": {"long_name": "1 hour fuel moisture expressed as ratio on total mass basis", "range": None, "SI_unit": None},
+    "mdOnTotal10h": {"long_name": "10 hour fuel moisture expressed as ratio on total mass basis", "range": None, "SI_unit": None},
+    "mdOnTotal100h": {"long_name": "100 hour fuel moisture expressed as ratio on total mass basis", "range": None, "SI_unit": None},
+    "mdOnDryLHerb": {"long_name": "Live herbaceous fuel moisture expressed as ratio on total mass basis", "range": None, "SI_unit": None},
+    "mdOnDryLWood": {"long_name": "Live woody fuel moisture expressed as ratio on total mass basis", "range": None, "SI_unit": None},
+    
+    'Ta': {"long_name": "Ambient temperature", "range": None, "SI_unit": None},
+    'Ti': {"long_name": "Ignition temperature", "range": None, "SI_unit": None},
+    'Tvap': {"long_name": "Vaporisation temperature", "range": None, "SI_unit": None},
+    'Tau0': {"long_name": "Flame residence time parameter", "range": None, "SI_unit": None},
+    'hEvap': {"long_name": "Heat of latent evaporation", "range": None, "SI_unit": None},
+    'Cpf': {"long_name": "Specific heat of fuel", "range": None, "SI_unit": None},
+    'Cpa': {"long_name": "Specific heat of air", "range": None, "SI_unit": None},
+    'X0': {"long_name": "Radiative factor", "range": None, "SI_unit": None},
+    'K1': {"long_name": "Drag coefficient", "range": None, "SI_unit": None},
+    'st': {"long_name": "Air–pyrolysis gas mass ratio in the flame body", "range": None, "SI_unit": None},
+    'r00': {"long_name": "Model coefficient", "range": None, "SI_unit": None},
+    
+    # Constants
+    'B': {"long_name": "Stefan–Boltzmann constant", "range": None, "SI_unit": None},
+    'g': {"long_name": "Acceleration due to gravity", "range": None, "SI_unit": None},
+    'airDens': {"long_name": "Air density", "range": None, "SI_unit": None},
     
     ## Output Parameters
-    "ROS"  :"Rate of Spread", 
-    "FllH" :"Flame height", 
-    "PR"   :"propagating flux", 
-    "FI"   :"reaction_intensity"
+    "ROS": {"long_name": "Rate of Spread", "range": None, "SI_unit": None},
+    "FllH": {"long_name": "Flame height", "range": None, "SI_unit": None},
+    "PR": {"long_name": "Propagating flux", "range": None, "SI_unit": None},
+    "FI": {"long_name": "Reaction intensity", "range": None, "SI_unit": None}
 }
 
 unit_representation = {
@@ -118,7 +150,6 @@ convert_metric = {
     'BTUftmin' : 0.189,         #  BTU/ft²/min  to  kJ/m²/s, 
     'kJms' : 1,
     'deg': 1,                 # degrees angle 
-    'rad': math.pi / 180 ,     # radians angle 
     'degK': 1,            # temperature in Kelvin
     'm': 1,                 # meters 
     'r': 1,               # ratio
@@ -301,7 +332,7 @@ class model_parameters:
             param_name, unit = attr.split('_', 1)
             
         if param_name in fuel_properties:
-            res =  fuel_properties[param_name]
+            res =  fuel_properties[param_name]["long_name"]
     
         if unit in unit_representation:
             res = res + " in "  + unit_representation[unit]
@@ -313,9 +344,9 @@ class model_parameters:
 def test():
 
     A4 = {'load_tac': 5, 'weight_lb': 100, 'speed_pc': 10  , 'tata_ftinv' : 10}
-
     a4_params = model_parameters(A4)
    
+    print("load", a4_params.load_lbft2, a4_params.load_kgm2, a4_params.load_tac)
     a4_params.ma = 5
     a4_params.mb = 50
     

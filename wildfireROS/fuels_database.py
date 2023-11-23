@@ -36,7 +36,7 @@ AR2017_anyfueltable_csv = """SAV10h_ftinv,SAV100h_ftinv,H_BTUlb,fuelDens_lbft3,t
 """
 
 pineNeedlesBalbi2020_csv = """CODE,Ta_degK,Ti_degK,Tvap_degK,Tau0_spm,hEvap_Jkg,H_Jkg,Cpf_JkgK,Cpa_JkgK,X0,K1_spm,st_r,r00,B,g,fl1h_kgm2,SAV1h_minv,fd_m,mdOnDry1h_r,fuelDens_kgm3,airDens_kgm3
-PN1,300,600,373,75591,2300000.0,17400000.0,2030,1150,0.3,130,17,2.5e-05,5.6e-08,9.81,0.078,6000,0.1,0.1,500,1.225"""
+PN1,300,600,373,75591,2300000.0,17400000.0,2030,1150,0.3,130,17,2.5e-05,5.6e-08,9.81,0.4,6000,0.1,0.1,500,1.225"""
 
 
 # values as in table 7 in  Scott&Burgan 2005. but they differ from the text values

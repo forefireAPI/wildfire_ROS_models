@@ -26,6 +26,18 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
+from .model_set import *
+ 
+def Rothermel1972_valuesset():
+    return {"identification":model_parameters({'CODE': 'A4'}),
+            "typical": model_parameters({'H': 18608.0,'SAVcar': 5705.380577427821, 'fd': 1.8, 'fuelDens': 512.592,'Dme': 0.2}),
+            "fuelstate": model_parameters({'fl1h': 0.4}),
+            "environment":  model_parameters({'wind':10,'slope':0,'mdOnDry1h':0.06}),
+            "model": model_parameters({'totMineral': 0.0555, 'effectMineral': 0.01}),
+            "constants":  model_parameters()
+            }
+
+
 def Rothermel1972(Z, print_calculus = False):
   
     
@@ -80,6 +92,15 @@ def Rothermel1972(Z, print_calculus = False):
     return {"ROS_ftmin":rate_of_spread, "PR_r":propagating_flux, "FI_BTUftmin":reaction_intensity}
 
 
+def RothermelAndrews2018_valuesset():
+    return {"identification":model_parameters({'CODE': 'A4'}),
+            "typical": model_parameters({'H': 18608.0,'SAVcar': 5705.380577427821, 'fd': 1.8, 'fuelDens': 512.592,'Dme': 0.2,'bulkDens': 1.9222199999999998, 'packRatio': 0.52}),
+            "fuelstate": model_parameters({'fl1h': 0.4}),
+            "environment":  model_parameters({'wind':10,'slope':0,'mdOnDry1h':0.06}),
+            "model": model_parameters({'totMineral': 0.0555, 'effectMineral': 0.01}),
+            "constants":  model_parameters()
+            }
+
 
 def RothermelAndrews2018(Z, print_calculus = False):
     
@@ -89,7 +110,6 @@ def RothermelAndrews2018(Z, print_calculus = False):
     wv = Z.wind_ftmin   # Wind velocity at midflame height (ft/minute) 
     fpsa = Z.SAVcar_ftinv   # Fuel Particle surface area to volume ratio (1/ft)
     mf = Z.mdOnDry1h_r   # Fuel particle moisture content
-    
     h = Z.H_BTUlb  # Fuel particle low heat content
     pp = Z.fuelDens_lbft3  # Ovendry particle density
     st = Z.totMineral_r  # Fuel particle mineral content
@@ -97,6 +117,7 @@ def RothermelAndrews2018(Z, print_calculus = False):
     mois_ext = Z.Dme_r  # Moisture content of extinction
     wind = Z.wind_ftmin # wind velocity at mid flame
     slope_rad = math.radians(Z.slope_deg) # slope angle 
+    
     
     if(print_calculus):
         print("Rothermel model such as Andrews and Rothermel 2017")

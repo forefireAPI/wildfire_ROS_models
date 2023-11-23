@@ -15,7 +15,10 @@ Just read line by line what tit does and run the file
 from wildfireROS import fuels_database as fdb
 from wildfireROS.runROS import run_model,  plot_results
 from wildfireROS.model_set import model_parameters
-from wildfireROS.Balbi2020 import *
+
+from wildfireROS.sensitivity import plot_sobol_indices, generate_problem_set, verify_error
+from wildfireROS.neuralNetROS import *
+
 import numpy as np
 
 
@@ -25,7 +28,6 @@ def figure_9_AndrewsRothermel2017():
     
     environment = model_parameters({'wind_miph':10,'slope_deg':0,'mdOnDry1h_r':0.06,'mdOnDry10h_r':0.07,'mdOnDry100h_r':0.08,'mdOnDryLHerb_r':0.6,'mdOnDryLWood_r':0.9}) 
     
-    plot_results([run_model("AndrewsRothermel2017", fm + A2017_any[0] + environment, "wind_miph", np.arange(0, 20, 0.1)) for fm in A2017], 'wind_miph','ROS_ftmin')
     plot_results([run_model("Rothermel1972", fm + A2017_any[0] + environment, "wind_miph", np.arange(0, 20, 0.1)) for fm in A2017], 'wind_miph','ROS_ftmin')
 
 
@@ -59,10 +61,28 @@ def figure_3_4_Balbi2020():
     plot_results([W02,W03], 'mdOnDry1h_kgm2','RelativeRos_r')
 
     
+
 figure_9_AndrewsRothermel2017()
+
 figure_3_4_Balbi2020()
 
-pn = fdb.load_csv(fdb.pineNeedlesBalbi2020_csv)[0] + model_parameters({'wind_mps':0,'slope_deg':0 })
-plot_results([run_model("Balbi2020", pn , "slope_deg", np.arange(0, 45, 1))], 'ROS_mps','slope_deg')
+plot_sobol_indices(generate_problem_set("AndrewsRothermel2017",  N= 100))
+plot_sobol_indices(generate_problem_set("Rothermel1972",  N= 100))
+plot_sobol_indices(generate_problem_set("Balbi2020",  N= 100))
+
+model_path = "Rothermel1972ANNs"
+
+pset = generate_problem_set("Rothermel1972",  N= 200)
+train_wildfire_speed_emulator(pset,model_path)
+pset2 = add_results_emulation(pset, model_path)
+pset3 = add_results_emulation(generate_problem_set("Rothermel1972",  N= 100), model_path)
+
+print("Initial error ",verify_error(pset))
+print("Learn set error ",verify_error(pset2,lookat='results_emulation'))
+print("Other set error ",verify_error(pset3,lookat='results_emulation'))
+
+plot_sobol_indices(generate_problem_set("Rothermel1972",  N= 100))
+plot_sobol_indices(pset2,lookat='results_emulation')
+plot_sobol_indices(pset3,lookat='results_emulation')
 
 

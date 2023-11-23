@@ -12,20 +12,37 @@ import matplotlib.pyplot as plt
 import numpy as np
  
 from .model_set import model_parameters
-from .RothermelAndrews2018 import Rothermel1972, RothermelAndrews2018
-from .Balbi2020 import Balbi2020
+from .RothermelAndrews2018 import *
+from .Balbi2020 import *
+
+
+
+
+def get_values_Rothermel1972(input_dict):
+    model_path = 'path_to_Rothermel1972_model'
+    return predict_single_output(model_path, input_dict)
+
+def get_values_AndrewsRothermel2017(input_dict):
+    model_path = 'path_to_AndrewsRothermel2017_model'
+    return predict_single_output(model_path, input_dict)
+
+def get_values_Balbi2020(input_dict):
+    model_path = 'path_to_Balbi2020_model'
+    return predict_single_output(model_path, input_dict)
+
+
 
 ROS_models = {
-    "Rothermel1972": Rothermel1972,
-    "AndrewsRothermel2017": RothermelAndrews2018,
-    "Balbi2020": Balbi2020
+    "Rothermel1972": { "get_values":Rothermel1972, "get_set": Rothermel1972_valuesset},
+    "AndrewsRothermel2017": { "get_values":RothermelAndrews2018, "get_set": RothermelAndrews2018_valuesset},
+    "Balbi2020": { "get_values":Balbi2020, "get_set": Balbi2020_valuesset}
 }
 
 def run_model(ROS_model_name, fuel_model, param_name, values_range):
     
     out_values = []
     initial_value =  getattr(fuel_model, param_name)
-    model_function = ROS_models[ROS_model_name]
+    model_function = ROS_models[ROS_model_name]["get_values"]
     
     for value in values_range:
         setattr(fuel_model, param_name, value)

@@ -17,56 +17,64 @@ License: GPL
 
 import numpy as np
 import tensorflow as tf
-import sobol_seq
-from sklearn.model_selection import train_test_split
-
-def data_generation(problem, ROS_models, model_name, num_samples=1000):
-    import sobol_seq as sobolsample
-    param_values = sobolsample.i4_sobol_generate(problem['num_vars'], num_samples)
-    model_results = []
-
-    for params in param_values:
-        fm = {name: value for name, value in zip(problem['names'], params)}
-        result = model_parameters(ROS_models[model_name](fm))
-        model_results.append(result.ROS)
-
-    return param_values, model_results
 
 
-def train(X_train, Y_train, X_val, Y_val, model_path):
-    import tensorflow as tf
+from .model_set import model_parameters, var_properties
+from .sensitivity import generate_problem_set
 
+def train_wildfire_speed_emulator(problem,model_path):
+    # Extracting data
+    X = problem['input']  # Feature matrix
+    y = problem['results']  # Target values
+
+    # Define a neural network model suitable for regression
     model = tf.keras.Sequential([
-        tf.keras.layers.Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
-        tf.keras.layers.Dense(64, activation='relu'),
-        tf.keras.layers.Dense(1)
+        tf.keras.layers.Dense(32, activation='relu', input_shape=(problem['num_vars'],)),
+        tf.keras.layers.Dense(16, activation='relu'),
+        tf.keras.layers.Dense(1)  # Output layer for regression
     ])
 
+    # Compile the model for regression
     model.compile(optimizer='adam', loss='mean_squared_error')
-    model.fit(X_train, Y_train, epochs=100, validation_data=(X_val, Y_val))
+
+    # Train the model
+    model.fit(X, y, epochs=80, batch_size=32)  # Epochs and batch_size can be adjusted based on the dataset size
 
     model.save(model_path)  # Saving the model
     return model
 
+def add_results_emulation(problem, model_path):
+    # Load the trained model
+    model = tf.keras.models.load_model(model_path)
 
-class ModelPrediction:
-    def __init__(self, model_path, look_at):
-        import tensorflow as tf
-        self.model = tf.keras.models.load_model(model_path)
-        self.look_at = look_at
-        self.feature_order = list(look_at.keys())  # Extracting the order of features
+    # Prepare input data - assuming 'input' is already in the correct format
+    input_data = problem['input']
 
-    def align_features(self, input_data):
-        # Reorder the input_data to match the order in self.feature_order
-        aligned_data = []
-        for feature in self.feature_order:
-            if feature in input_data:
-                aligned_data.append(input_data[feature])
-            else:
-                raise ValueError(f"Feature {feature} missing in input data")
-        return aligned_data
+    # Check if input_data dimensions match num_vars
+    if input_data.shape[1] != problem['num_vars']:
+        raise ValueError("Input data dimensions do not match the number of variables")
 
-    def predict(self, input_data):
-        aligned_data = self.align_features(input_data)
-        predictions = self.model.predict([aligned_data])
-        return predictions
+    # Make predictions
+    predictions = model.predict(input_data)
+
+    # Update the problem dictionary with predictions
+    problem['results_emulation'] = predictions.flatten()  # Flatten in case predictions are in 2D array
+
+    return problem
+
+def predict_single_output(model_path, input_dict):
+    # Load the trained model
+    model = tf.keras.models.load_model(model_path)
+
+    # Prepare the input data in the correct order
+    input_order = input_dict['names']
+    input_values = np.array([input_dict['input'][name] for name in input_order])
+
+    # Reshape input_values for a single prediction
+    input_values = input_values.reshape(1, -1)
+
+    # Make the prediction
+    prediction = model.predict(input_values)
+
+    # Return the scalar result
+    return model_parameters({"ROS":prediction[0, 0]}) 

@@ -17,16 +17,16 @@ from models.[model_file_name] import [ModelClassName]
 """
 import math
 import numpy as np
-import matplotlib.pyplot as plt
 
  
 from .model_set import *
 
 def Balbi2020_valuesset():
-    return {"typical": model_parameters({'CODE': 'PN1', 'H': 17400.0, 'Cpf': 2030,  'SAV1h': 6000, 'fd': 0.1, 'fuelDens': 500, 'st': 17}),
+    return {"identification":model_parameters({'CODE': 'PN1'}),
+            "typical": model_parameters({'H': 17400.0, 'Cpf': 2030,  'SAV1h': 6000, 'fd': 0.1, 'fuelDens': 500}),
             "fuelstate": model_parameters({'fl1h': 0.4, 'mdOnDry1h': 0.1}),
             "environment":  model_parameters({'Ta': 300, 'wind': 0, 'slope': 0.0, 'airDens': 1.225}),
-            "model": model_parameters({'Ti': 600, 'Tvap': 373, 'Tau0': 75591, 'hEvap': 2300.0, 'Cpa': 1150, 'X0': 0.3, 'K1': 130,  'r00': 2.5e-05}),
+            "model": model_parameters({'Ti': 600, 'Tvap': 373, 'Tau0': 75591, 'hEvap': 2300.0, 'Cpa': 1150, 'X0': 0.3, 'K1': 130,  'r00': 2.5e-05, 'st': 17}),
             "constants":  model_parameters({'B': 5.6e-08, 'g': 9.81})
             }
                              
@@ -134,8 +134,11 @@ def Balbi2020(Z, print_calculus = False):
 			
         stopcondition = (abs(error) > maxEps);
 	
-    if (flag != 1):    
-        print(f"no convergence in {N} steps for Balbi, error is {error}, returning ROS ", Z)
+    if (flag != 1): 
+        if print_calculus :
+            print(f"no convergence in {N} steps for Balbi, error is {error}, returning ROS ", Z)
+        else:
+            print(".", end="")
         
     return {"ROS_mps":Rnew, "FllH_m":H}
 

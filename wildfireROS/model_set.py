@@ -13,77 +13,56 @@ License: GPL
 """
 import math
 import numpy as np
-
-look_at = {'Ta': [294.0, 306.0],
-         'Ti': [588.0, 612.0],
-         'Tvap': [365.54, 380.46],
-         'Tau0': [74079.18, 77102.82],
-         'hEvap': [2254.0, 2346.0],
-         'H': [17052.0, 17748.0],
-         'Cpf': [1989.4, 2070.6],
-         'Cpa': [1127.0, 1173.0],
-         'X0': [0.294, 0.306],
-         'st': [16.66, 17.34],
-         'fl1h': [0.392, 0.40800000000000003],
-         'SAV1h': [5880.0, 6120.0],
-         'fd': [0.098, 0.10200000000000001],
-         'mdOnDry1h': [0.098, 0.10200000000000001],
-         'fuelDens': [490.0, 510.0],
-         'airDens': [1.2005000000000001, 1.2495],
-         'wind': [1.96, 2.04],
-         'slope_deg': [0, 0.001]
-    }
  
    
-fuel_properties = {
+var_properties = {
     "CODE": {"long_name": "Shortname - code", "range": None, "SI_unit": None},
     "INDEX": {"long_name": "Integer used as classification number", "range": None, "SI_unit": None},
     
     # Fuel Characteristic Parameters
     "ftype": {"long_name": "S for static, D for dynamic, N for Non applicable", "range": None, "SI_unit": None},
-    "SAV1h": {"long_name": "Surface-area-to-volume ratio for 1h fuel", "range": None, "SI_unit": None},
-    "SAV10h": {"long_name": "Surface-area-to-volume ratio for 10h fuel", "range": None, "SI_unit": None},
-    "SAV100h": {"long_name": "Surface-area-to-volume ratio for 100h fuel", "range": None, "SI_unit": None},
-    "SAVLDherb": {"long_name": "Surface-area-to-volume ratio for live and dead herbaceous", "range": None, "SI_unit": None},
-    "SAVLwood": {"long_name": "Surface-area-to-volume ratio for live woody", "range": None, "SI_unit": None},
-    "SAVcar": {"long_name": "Characteristic SAV", "range": None, "SI_unit": None},
-    "fd": {"long_name": "Fuel bed depth", "range": None, "SI_unit": None},
+    "SAV1h": {"long_name": "Surface-area-to-volume ratio for 1h fuel", "range": [5000.0, 7000.0], "SI_unit": None},
+    "SAV10h": {"long_name": "Surface-area-to-volume ratio for 10h fuel", "range": [4000.0, 6000.0], "SI_unit": None},
+    "SAV100h": {"long_name": "Surface-area-to-volume ratio for 100h fuel", "range": [4000.0, 6000.0], "SI_unit": None},
+    "SAVLDherb": {"long_name": "Surface-area-to-volume ratio for live and dead herbaceous", "range": [4000.0, 6000.0], "SI_unit": None},
+    "SAVLwood": {"long_name": "Surface-area-to-volume ratio for live woody", "range": [4000.0, 6000.0], "SI_unit": None},
+    "SAVcar": {"long_name": "Characteristic SAV", "range": [5000.0, 7000.0], "SI_unit": None},
+    "fd": {"long_name": "Fuel bed depth", "range": [0.1, 2], "SI_unit": None},
+    "H": {"long_name": "Heat content", "range": [15000.0, 20000.0], "SI_unit": None},
+    "bulkDens": {"long_name": "Bulk density", "range": [0.5, 16.0], "SI_unit": None},
+    "packRatio": {"long_name": "Relative packing ratio", "range": [0.001,0.05], "SI_unit": None},
+    "fuelDens": {"long_name": "Ovendry fuel particle density", "range": [400.0, 600.0], "SI_unit": None},
+    'Tau0': {"long_name": "Flame residence time", "range": [60000, 80000], "SI_unit": None},
     
     # Fuel State parameter
-    "fl1h": {"long_name": "Ovendry 1h fuel load", "range": None, "SI_unit": None},
-    "fl10h": {"long_name": "Ovendry 10h fuel load", "range": None, "SI_unit": None},
-    "fl100h": {"long_name": "Ovendry 100h fuel load", "range": None, "SI_unit": None},
-    "flLherb": {"long_name": "Live herbaceous load", "range": None, "SI_unit": None},
-    "flLwood": {"long_name": "Live woody load", "range": None, "SI_unit": None},
-
-    "Dme": {"long_name": "Dead fuel moisture of extinction", "range": None, "SI_unit": None},
-    "H": {"long_name": "Heat content", "range": None, "SI_unit": None},
-    "bulkDens": {"long_name": "Bulk density", "range": None, "SI_unit": None},
-    "packRatio": {"long_name": "Relative packing ratio", "range": None, "SI_unit": None},
-    "fuelDens": {"long_name": "Ovendry fuel particle density", "range": None, "SI_unit": None},
+    "fl1h": {"long_name": "Ovendry 1h fuel load", "range": [0.1, 5], "SI_unit": None},
+    "fl10h": {"long_name": "Ovendry 10h fuel load", "range": [0.1, 5], "SI_unit": None},
+    "fl100h": {"long_name": "Ovendry 100h fuel load", "range": [0.1, 5], "SI_unit": None},
+    "flLherb": {"long_name": "Live herbaceous load", "range": [0.1, 5], "SI_unit": None},
+    "flLwood": {"long_name": "Live woody load", "range": [0.1, 5], "SI_unit": None},
+    "Dme": {"long_name": "Dead fuel moisture of extinction", "range": [0.1,0.5], "SI_unit": None},
+    'Cpf': {"long_name": "Specific heat of fuel", "range": [1500, 2500], "SI_unit": None},
+    "mdOnDry1h": {"long_name": "1 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 0.4], "SI_unit": None},
+    "mdOnDry10h": {"long_name": "10 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 1], "SI_unit": None},
+    "mdOnDry100h": {"long_name": "100 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 1], "SI_unit": None},
+    "mdOnTotal1h": {"long_name": "1 hour fuel moisture expressed as ratio on total mass basis", "range": [0.0, 1], "SI_unit": None},
+    "mdOnTotal10h": {"long_name": "10 hour fuel moisture expressed as ratio on total mass basis", "range": [0.0, 1], "SI_unit": None},
+    "mdOnTotal100h": {"long_name": "100 hour fuel moisture expressed as ratio on total mass basis", "range": [0.0, 1], "SI_unit": None},
+    "mdOnDryLHerb": {"long_name": "Live herbaceous fuel moisture expressed as ratio on total mass basis", "range": [0.0, 1], "SI_unit": None},
+    "mdOnDryLWood": {"long_name": "Live woody fuel moisture expressed as ratio on total mass basis", "range": [0.0, 1], "SI_unit": None},
+ 
+    # Environment parameters
+    "wind": {"long_name": "Wind speed at midflame height", "range": [0, 10], "SI_unit": None},
+    "slope": {"long_name": "Slope angle", "range": [0, 60], "SI_unit": None},
+    'Ta': {"long_name": "Ambient temperature", "range": [280.0, 310.0], "SI_unit": None},
+    'airDens': {"long_name": "Air density", "range": [0.825, 1.225], "SI_unit": None},
     
     # Model Parameters
     "totMineral": {"long_name": "Total fuel particle mineral relative content", "range": None, "SI_unit": None},
     "effectMineral": {"long_name": "Effective (silica-free) mineral relative content", "range": None, "SI_unit": None},
-    
-    # Environment parameters
-    "wind": {"long_name": "Wind speed at midflame height", "range": None, "SI_unit": None},
-    "slope": {"long_name": "Slope angle", "range": None, "SI_unit": None},
-    "mdOnDry1h": {"long_name": "1 hour fuel moisture expressed as ratio on dry mass basis", "range": None, "SI_unit": None},
-    "mdOnDry10h": {"long_name": "10 hour fuel moisture expressed as ratio on dry mass basis", "range": None, "SI_unit": None},
-    "mdOnDry100h": {"long_name": "100 hour fuel moisture expressed as ratio on dry mass basis", "range": None, "SI_unit": None},
-    "mdOnTotal1h": {"long_name": "1 hour fuel moisture expressed as ratio on total mass basis", "range": None, "SI_unit": None},
-    "mdOnTotal10h": {"long_name": "10 hour fuel moisture expressed as ratio on total mass basis", "range": None, "SI_unit": None},
-    "mdOnTotal100h": {"long_name": "100 hour fuel moisture expressed as ratio on total mass basis", "range": None, "SI_unit": None},
-    "mdOnDryLHerb": {"long_name": "Live herbaceous fuel moisture expressed as ratio on total mass basis", "range": None, "SI_unit": None},
-    "mdOnDryLWood": {"long_name": "Live woody fuel moisture expressed as ratio on total mass basis", "range": None, "SI_unit": None},
-    
-    'Ta': {"long_name": "Ambient temperature", "range": None, "SI_unit": None},
     'Ti': {"long_name": "Ignition temperature", "range": None, "SI_unit": None},
     'Tvap': {"long_name": "Vaporisation temperature", "range": None, "SI_unit": None},
-    'Tau0': {"long_name": "Flame residence time parameter", "range": None, "SI_unit": None},
     'hEvap': {"long_name": "Heat of latent evaporation", "range": None, "SI_unit": None},
-    'Cpf': {"long_name": "Specific heat of fuel", "range": None, "SI_unit": None},
     'Cpa': {"long_name": "Specific heat of air", "range": None, "SI_unit": None},
     'X0': {"long_name": "Radiative factor", "range": None, "SI_unit": None},
     'K1': {"long_name": "Drag coefficient", "range": None, "SI_unit": None},
@@ -93,13 +72,12 @@ fuel_properties = {
     # Constants
     'B': {"long_name": "Stefan–Boltzmann constant", "range": None, "SI_unit": None},
     'g': {"long_name": "Acceleration due to gravity", "range": None, "SI_unit": None},
-    'airDens': {"long_name": "Air density", "range": None, "SI_unit": None},
     
     ## Output Parameters
     "ROS": {"long_name": "Rate of Spread", "range": None, "SI_unit": None},
     "FllH": {"long_name": "Flame height", "range": None, "SI_unit": None},
     "PR": {"long_name": "Propagating flux", "range": None, "SI_unit": None},
-    "FI": {"long_name": "Reaction intensity", "range": None, "SI_unit": None}
+    "FI": {"long_name": "Reaction intensity", "range": None, "SI_unit": None}    
 }
 
 unit_representation = {
@@ -167,7 +145,6 @@ convert_metric = {
 }           
 
 
-
 class model_parameters:
     """
     A class to handle and convert measurement units in model parameter data.
@@ -200,7 +177,6 @@ class model_parameters:
     - mpm     : Speed (meters per minute)
     - r       : Ratio (dimensionless)
     - deg     : Angle (degrees, same in metric)
-    - rad     : Angle (radian, same in metric)
     - kJkg    : Heat content  Kj per kg
     
     Note: For units like 'r', and 'deg', no direct metric equivalent is needed as they are dimensionless or have the same representation in the metric system. 
@@ -331,8 +307,8 @@ class model_parameters:
         if '_' in attr:
             param_name, unit = attr.split('_', 1)
             
-        if param_name in fuel_properties:
-            res =  fuel_properties[param_name]["long_name"]
+        if param_name in var_properties:
+            res =  var_properties[param_name]["long_name"]
     
         if unit in unit_representation:
             res = res + " in "  + unit_representation[unit]

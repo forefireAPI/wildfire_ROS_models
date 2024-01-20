@@ -3,10 +3,6 @@
 ## Overview
 This Python package provides a comprehensive library of models for simulating the Rate of Spread (ROS) of wildfires. Based on ROS models publications, this library serves as a  tool for researchers and practitioners in the field of wildfire management and simulation in order to help intercompare formulations. 
 
-## Installation
-```bash
-pip install wildfire_ros_models
-```
 
 ## Usage
 To use this library, import the desired model from the `models` directory and provide the necessary parameters as per the model's documentation. Example usage can be found in the `test` directory.

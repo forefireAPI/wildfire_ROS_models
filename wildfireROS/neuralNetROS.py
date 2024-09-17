@@ -17,37 +17,60 @@ License: GPL
 
 import numpy as np
 import tensorflow as tf
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
+
+from .model_set import model_parameters
 
 
-from .model_set import model_parameters, var_properties
-from .sensitivity import generate_problem_set
-
-def train_wildfire_speed_emulator(problem,model_path):
+def train_wildfire_speed_emulator(model, problem, model_path, config):
     # Extracting data
     X = problem['input']  # Feature matrix
     y = problem['results']  # Target values
 
-    # Define a neural network model suitable for regression
-    model = tf.keras.Sequential([
-        tf.keras.layers.Dense(32, activation='relu', input_shape=(problem['num_vars'],)),
-        tf.keras.layers.Dense(16, activation='relu'),
-        tf.keras.layers.Dense(1)  # Output layer for regression
-    ])
+    l1_reg = tf.keras.regularizers.l1(config['l1_reg_coeff'])
+    for layer in model.layers:
+        layer.kernel_regularizer = l1_reg 
+
+    # Define SGD algorithm
+    optimizer = tf.keras.optimizers.Adam(learning_rate=config['learning_rate'])
 
     # Compile the model for regression
-    model.compile(optimizer='adam', loss='mean_squared_error')
-
+    model.compile(
+        optimizer=optimizer,
+        loss=config['loss']
+        )
+    
+    # Stop optimization when validation loss increases
+    earlyStopping = EarlyStopping(monitor='val_loss', patience=config['patience'], verbose=0, mode='min')
+    
+    # Save model if validation loss is improved
+    mcp_save = ModelCheckpoint(config['model_path'], save_best_only=True, monitor='val_loss', mode='min')
+    
+    # Reduce learning rate when validation loss reaches a plateau
+    reduce_lr_loss = ReduceLROnPlateau(
+        monitor='val_loss', 
+        factor=config['lr_scheduler']['factor'], 
+        patience=config['lr_scheduler']['patience'], 
+        verbose=1, 
+        min_delta=config['lr_scheduler']['min_delta'], 
+        mode='min'
+        )
+    
     # Train the model
-    model.fit(X, y, epochs=80, batch_size=32)  # Epochs and batch_size can be adjusted based on the dataset size
+    model.fit(
+        X['train'], 
+        y['train'], 
+        epochs=config['epochs'], 
+        batch_size=config['batch_size'],
+        validation_data=(X['val'], y['val']),
+        callbacks=[earlyStopping, mcp_save, reduce_lr_loss])
 
     model.save(model_path)  # Saving the model
     return model
 
-def add_results_emulation(problem, model_path):
-    # Load the trained model
-    model = tf.keras.models.load_model(model_path)
-
+def add_results_emulation(problem, model):
     # Prepare input data - assuming 'input' is already in the correct format
+    problem['results_emulation'] = {}
     input_data = problem['input']
 
     # Check if input_data dimensions match num_vars

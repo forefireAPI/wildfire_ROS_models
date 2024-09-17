@@ -62,27 +62,27 @@ def figure_3_4_Balbi2020():
 
     
 
-figure_9_AndrewsRothermel2017()
+# figure_9_AndrewsRothermel2017()
 
-figure_3_4_Balbi2020()
+# figure_3_4_Balbi2020()
 
-plot_sobol_indices(generate_problem_set("AndrewsRothermel2017",  N= 100))
-plot_sobol_indices(generate_problem_set("Rothermel1972",  N= 100))
-plot_sobol_indices(generate_problem_set("Balbi2020",  N= 100))
+plot_sobol_indices(generate_problem_set("AndrewsRothermel2017",  N= 1000))
+# plot_sobol_indices(generate_problem_set("Rothermel1972",  N= 100))
+# plot_sobol_indices(generate_problem_set("Balbi2020",  N= 100))
 
-model_path = "Rothermel1972ANNs"
+# model_path = "Rothermel1972ANNs"
 
-pset = generate_problem_set("Rothermel1972",  N= 200)
-train_wildfire_speed_emulator(pset,model_path)
-pset2 = add_results_emulation(pset, model_path)
-pset3 = add_results_emulation(generate_problem_set("Rothermel1972",  N= 100), model_path)
+# pset = generate_problem_set("Rothermel1972",  N= 200)
+# train_wildfire_speed_emulator(pset,model_path)
+# pset2 = add_results_emulation(pset, model_path)
+# pset3 = add_results_emulation(generate_problem_set("Rothermel1972",  N= 100), model_path)
 
-print("Initial error ",verify_error(pset))
-print("Learn set error ",verify_error(pset2,lookat='results_emulation'))
-print("Other set error ",verify_error(pset3,lookat='results_emulation'))
+# print("Initial error ",verify_error(pset))
+# print("Learn set error ",verify_error(pset2,lookat='results_emulation'))
+# print("Other set error ",verify_error(pset3,lookat='results_emulation'))
 
-plot_sobol_indices(generate_problem_set("Rothermel1972",  N= 100))
-plot_sobol_indices(pset2,lookat='results_emulation')
-plot_sobol_indices(pset3,lookat='results_emulation')
+# plot_sobol_indices(generate_problem_set("Rothermel1972",  N= 100))
+# plot_sobol_indices(pset2,lookat='results_emulation')
+# plot_sobol_indices(pset3,lookat='results_emulation')
 
 

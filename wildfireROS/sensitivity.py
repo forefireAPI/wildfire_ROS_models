@@ -16,10 +16,10 @@ from .model_set import model_parameters, var_properties
 
 import matplotlib.pyplot as plt
 import numpy as np
-import math
+from sklearn.model_selection import train_test_split
 
     
-def generate_problem_set(model_key, kind_of_parameter = ["environment","typical","fuelstate"], result_var="ROS", N = 10000):
+def generate_problem_set(model_key, kind_of_parameter = ["environment","typical","fuelstate"], result_var="ROS", N=10000, val_prop=None):
 
     modelVSet  =  ROS_models[model_key]["get_set"]()
     
@@ -54,6 +54,17 @@ def generate_problem_set(model_key, kind_of_parameter = ["environment","typical"
         
     problem["result_var"] = result_var
     problem["results"] = np.array(model_results)
+
+    if val_prop is not None:
+        X_train, X_val, y_train, y_val = train_test_split(problem['input'], problem['results'], test_size=val_prop)
+        problem['input'] = {
+            'train': X_train,
+            'val': X_val
+        }
+        problem['results'] = {
+            'train': y_train,
+            'val': y_val
+        }
     
     return problem
 

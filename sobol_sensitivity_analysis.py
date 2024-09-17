@@ -1,5 +1,5 @@
 """ Script to train a ROS model emulator and perform a sensibility analysis
-Ex: python train_nn.py --root /home/ai4geo/Documents/nn_ros_models --n_samples 256 --epochs 1 --overwrite
+Ex: python sobol_sensitivity_analysis.py --root /home/ai4geo/Documents/nn_ros_models --target_ros_model RothermelAndrews2018 --n_samples 10000
 """
 
 from wildfireROS.sensitivity import generate_problem_set, plot_sobol_indices, sobol_analysis

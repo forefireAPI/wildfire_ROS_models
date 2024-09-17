@@ -1,5 +1,5 @@
 """ Script to train a ROS model emulator
-Ex: python wildfireROS/train_nn.py --root /home/ai4geo/Documents/nn_ros_models --n_samples 256 --epochs 100 --overwrite
+Ex: python train_nn.py --root /home/ai4geo/Documents/nn_ros_models --target_ros_model RothermelAndrews2018 --n_samples 10000 --epochs 200 --overwrite
 """
 
 from wildfireROS.sensitivity import generate_problem_set

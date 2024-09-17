@@ -31,7 +31,7 @@ from .model_set import *
 def Rothermel1972_valuesset():
     return {"identification":{'CODE': 'A4'},
             "typical": {'H': 18608.0,'SAVcar': 5705.380577427821, 'fd': 1.8, 'fuelDens': 512.592,'Dme': 0.2},
-            "fuelstate": {'fl1h': 0.4},
+            "fuelstate": {'fl1h_tac': 0.4},
             "environment":  {'wind':10,'slope':0,'mdOnDry1h':0.06},
             "model": {'totMineral': 0.0555, 'effectMineral': 0.01},
             "constants": {}

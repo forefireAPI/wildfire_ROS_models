@@ -143,7 +143,7 @@ def load_csv(csv_string):
     # Iterate over each line except the header
     for line in lines[1:]:
         values = [convert_if_number(value) for value in line.split(',')]
-        dict_entry = {header: value for header, value in zip(original_headers, values) if remove_suffix_for_check(header) in var_properties}
+        dict_entry = {header: value for header, value in zip(original_headers, values)} #if remove_suffix_for_check(header) in var_properties}
         dict_list.append(model_parameters(dict_entry))
 
     return dict_list

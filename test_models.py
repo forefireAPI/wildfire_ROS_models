@@ -28,7 +28,7 @@ def figure_9_AndrewsRothermel2017():
     
     environment = model_parameters({'wind_miph':10,'slope_deg':0,'mdOnDry1h_r':0.06,'mdOnDry10h_r':0.07,'mdOnDry100h_r':0.08,'mdOnDryLHerb_r':0.6,'mdOnDryLWood_r':0.9}) 
     
-    plot_results([run_model("Rothermel1972", fm + A2017_any[0] + environment, "wind_miph", np.arange(0, 20, 0.1)) for fm in A2017], 'wind_miph','ROS_ftmin')
+    plot_results([run_model("RothermelAndrews2018", fm + A2017_any[0] + environment, "wind_miph", np.arange(0, 20, 0.1)) for fm in A2017], 'wind_miph','ROS_ftmin')
 
 
 
@@ -61,12 +61,12 @@ def figure_3_4_Balbi2020():
     plot_results([W02,W03], 'mdOnDry1h_kgm2','RelativeRos_r')
 
     
-
-# figure_9_AndrewsRothermel2017()
-
+import matplotlib.pyplot as plt
+figure_9_AndrewsRothermel2017()
+plt.show()
 # figure_3_4_Balbi2020()
 
-plot_sobol_indices(generate_problem_set("AndrewsRothermel2017",  N= 1000))
+# plot_sobol_indices(generate_problem_set("AndrewsRothermel2017",  N= 1000))
 # plot_sobol_indices(generate_problem_set("Rothermel1972",  N= 100))
 # plot_sobol_indices(generate_problem_set("Balbi2020",  N= 100))
 

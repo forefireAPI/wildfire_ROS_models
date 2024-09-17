@@ -35,12 +35,12 @@ var_properties = {
     'Tau0': {"long_name": "Flame residence time", "range": [60000, 80000], "SI_unit": None},
     
     # Fuel State parameter
-    "fl1h": {"long_name": "Ovendry 1h fuel load", "range": [0.1, 5], "SI_unit": None},
+    "fl1h_tac": {"long_name": "Ovendry 1h fuel load", "range": [0.1, 5], "SI_unit": None},
     "fl10h": {"long_name": "Ovendry 10h fuel load", "range": [0.1, 5], "SI_unit": None},
     "fl100h": {"long_name": "Ovendry 100h fuel load", "range": [0.1, 5], "SI_unit": None},
     "flLherb": {"long_name": "Live herbaceous load", "range": [0.1, 5], "SI_unit": None},
     "flLwood": {"long_name": "Live woody load", "range": [0.1, 5], "SI_unit": None},
-    "Dme": {"long_name": "Dead fuel moisture of extinction", "range": [0.1,0.5], "SI_unit": None},
+    "Dme_pc": {"long_name": "Dead fuel moisture of extinction", "range": [10, 50], "SI_unit": None},
     'Cpf': {"long_name": "Specific heat of fuel", "range": [1500, 2500], "SI_unit": None},
     "mdOnDry1h": {"long_name": "1 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 0.4], "SI_unit": None},
     "mdOnDry10h": {"long_name": "10 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 1], "SI_unit": None},

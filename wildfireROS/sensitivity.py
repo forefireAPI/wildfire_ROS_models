@@ -23,30 +23,31 @@ def generate_problem_set(model_key, kind_of_parameter = ["environment","typical"
 
     modelVSet  =  ROS_models[model_key]["get_set"]()
     
-    fm = model_parameters()
+    fm = {}
     for key in modelVSet.keys():
-        fm = fm+modelVSet[key]
-        
-    fm_var_set = model_parameters()
+        for var_key in modelVSet[key]:
+            fm[var_key] = modelVSet[key][var_key]
+    
+    fm_var_set = {}
     for key in kind_of_parameter:
-        fm_var_set = fm_var_set+modelVSet[key]
+        for var_key in modelVSet[key]:
+            fm_var_set[var_key] = modelVSet[key][var_key]
         
     problem = {
         'model_name':model_key,
-        
         'num_vars': len(fm_var_set.keys()),
         'names': list(fm_var_set.keys()),
         'bounds': [var_properties[name]["range"] for name in fm_var_set.keys()]
     }
     
     param_values = sobolsample.sample(problem, N)
-
     problem["input"] = param_values
 
     model_results = []    
     for params in param_values:
         for i, param_name in enumerate(problem['names']):
             fm[param_name] = params[i]
+        fm = model_parameters(fm)
         result = model_parameters(ROS_models[model_key]["get_values"](fm))
     
         model_results.append(result[result_var])

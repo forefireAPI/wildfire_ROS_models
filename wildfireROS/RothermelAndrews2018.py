@@ -96,7 +96,7 @@ def RothermelAndrews2018_valuesset():
     return {"identification":{'CODE': 'A4'},
             "typical": {'H': 18608.0,'SAVcar': 5705.380577427821, 'fd': 1.8, 'fuelDens': 512.592,'Dme_pc': 20,'bulkDens': 1.9222199999999998, 'packRatio': 0.52},
             "fuelstate": {'fl1h_tac': 0.4},
-            "environment":  {'wind':10,'slope':0,'mdOnDry1h':0.06},
+            "environment":  {'wind':10,'slope_tan':0,'mdOnDry1h':0.06},
             "model": {'totMineral': 0.0555, 'effectMineral': 0.01},
             "constants": {}
             }
@@ -116,6 +116,7 @@ def RothermelAndrews2018(Z, print_calculus = False):
     se = Z.effectMineral_r  # Fuel Particle effective mineral content
     mois_ext = Z.Dme_r  # Moisture content of extinction
     wind = Z.wind_ftmin # wind velocity at mid flame
+    import pdb; pdb.set_trace()
     slope_rad = math.radians(Z.slope_deg) # slope angle 
     
     

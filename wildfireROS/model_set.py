@@ -53,7 +53,7 @@ var_properties = {
  
     # Environment parameters
     "wind": {"long_name": "Wind speed at midflame height", "range": [0, 10], "SI_unit": None},
-    "slope": {"long_name": "Slope angle", "range": [0, 60], "SI_unit": None},
+    "slope_tan": {"long_name": "Slope angle", "range": [-2.7, 2.7], "SI_unit": None},
     'Ta': {"long_name": "Ambient temperature", "range": [280.0, 310.0], "SI_unit": None},
     'airDens': {"long_name": "Air density", "range": [0.825, 1.225], "SI_unit": None},
     
@@ -97,6 +97,7 @@ unit_representation = {
     'kJms': 'kJ/m²/s',
     'deg': '°',
     'rad': 'rad',
+    'tan': 'ratio',
     'degK': 'K',
     'm': 'm',
     'r': 'ratio',
@@ -188,6 +189,7 @@ class model_parameters:
         # Conversion factors
         self.to_metric = {unit: lambda x, factor=factor: np.multiply(x, factor) for unit, factor in convert_metric.items()}
         self.from_metric = {unit: lambda x, factor=factor: np.divide(x, factor) for unit, factor in convert_metric.items()}
+        self.to_metric['tan'] = lambda x: math.atan(x) * 180 / math.pi
       
        # self.to_metric = {unit: lambda x, factor=factor: x * factor for unit, factor in convert_metric.items()}
        # self.from_metric = {unit: lambda x, factor=factor: x / factor for unit, factor in convert_metric.items()}

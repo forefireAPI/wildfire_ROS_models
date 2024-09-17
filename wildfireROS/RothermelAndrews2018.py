@@ -27,14 +27,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from .model_set import *
- 
+
 def Rothermel1972_valuesset():
-    return {"identification":model_parameters({'CODE': 'A4'}),
-            "typical": model_parameters({'H': 18608.0,'SAVcar': 5705.380577427821, 'fd': 1.8, 'fuelDens': 512.592,'Dme': 0.2}),
-            "fuelstate": model_parameters({'fl1h': 0.4}),
-            "environment":  model_parameters({'wind':10,'slope':0,'mdOnDry1h':0.06}),
-            "model": model_parameters({'totMineral': 0.0555, 'effectMineral': 0.01}),
-            "constants":  model_parameters()
+    return {"identification":{'CODE': 'A4'},
+            "typical": {'H': 18608.0,'SAVcar': 5705.380577427821, 'fd': 1.8, 'fuelDens': 512.592,'Dme': 0.2},
+            "fuelstate": {'fl1h_tac': 0.4},
+            "environment":  {'wind':10,'slope':0,'mdOnDry1h':0.06},
+            "model": {'totMineral': 0.0555, 'effectMineral': 0.01},
+            "constants": {}
             }
 
 
@@ -93,12 +93,12 @@ def Rothermel1972(Z, print_calculus = False):
 
 
 def RothermelAndrews2018_valuesset():
-    return {"identification":model_parameters({'CODE': 'A4'}),
-            "typical": model_parameters({'H': 18608.0,'SAVcar': 5705.380577427821, 'fd': 1.8, 'fuelDens': 512.592,'Dme': 0.2,'bulkDens': 1.9222199999999998, 'packRatio': 0.52}),
-            "fuelstate": model_parameters({'fl1h': 0.4}),
-            "environment":  model_parameters({'wind':10,'slope':0,'mdOnDry1h':0.06}),
-            "model": model_parameters({'totMineral': 0.0555, 'effectMineral': 0.01}),
-            "constants":  model_parameters()
+    return {"identification":{'CODE': 'A4'},
+            "typical": {'H': 18608.0,'SAVcar': 5705.380577427821, 'fd': 1.8, 'fuelDens': 512.592,'Dme_pc': 20},
+            "fuelstate": {'fl1h_tac': 0.4},
+            "environment":  {'wind':10,'slope_tan':0,'mdOnDry1h':0.06},
+            "model": {'totMineral': 0.0555, 'effectMineral': 0.01},
+            "constants": {}
             }
 
 
@@ -115,7 +115,6 @@ def RothermelAndrews2018(Z, print_calculus = False):
     st = Z.totMineral_r  # Fuel particle mineral content
     se = Z.effectMineral_r  # Fuel Particle effective mineral content
     mois_ext = Z.Dme_r  # Moisture content of extinction
-    wind = Z.wind_ftmin # wind velocity at mid flame
     slope_rad = math.radians(Z.slope_deg) # slope angle 
     
     
@@ -173,7 +172,10 @@ def RothermelAndrews2018(Z, print_calculus = False):
         WC = (C * wv ** B) * math.pow((Beta / Beta_op), (-E))
         #WC= WC*0.74
         #Slope  coefficient
-        SC = 5.275*(Beta**-0.3)*tan_slope**2
+        if tan_slope >= 0:
+            SC = 5.275*(Beta**-0.3)*tan_slope**2
+        else:
+            SC = 0
         #Heat sink
 
         EHN = math.exp(-138. / fpsa)  # Effective Heating Number = f(surface are volume ratio)

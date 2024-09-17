@@ -35,12 +35,12 @@ var_properties = {
     'Tau0': {"long_name": "Flame residence time", "range": [60000, 80000], "SI_unit": None},
     
     # Fuel State parameter
-    "fl1h": {"long_name": "Ovendry 1h fuel load", "range": [0.1, 5], "SI_unit": None},
+    "fl1h_tac": {"long_name": "Ovendry 1h fuel load", "range": [0.1, 5], "SI_unit": None},
     "fl10h": {"long_name": "Ovendry 10h fuel load", "range": [0.1, 5], "SI_unit": None},
     "fl100h": {"long_name": "Ovendry 100h fuel load", "range": [0.1, 5], "SI_unit": None},
     "flLherb": {"long_name": "Live herbaceous load", "range": [0.1, 5], "SI_unit": None},
     "flLwood": {"long_name": "Live woody load", "range": [0.1, 5], "SI_unit": None},
-    "Dme": {"long_name": "Dead fuel moisture of extinction", "range": [0.1,0.5], "SI_unit": None},
+    "Dme_pc": {"long_name": "Dead fuel moisture of extinction", "range": [10, 50], "SI_unit": None},
     'Cpf': {"long_name": "Specific heat of fuel", "range": [1500, 2500], "SI_unit": None},
     "mdOnDry1h": {"long_name": "1 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 0.4], "SI_unit": None},
     "mdOnDry10h": {"long_name": "10 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 1], "SI_unit": None},
@@ -53,7 +53,7 @@ var_properties = {
  
     # Environment parameters
     "wind": {"long_name": "Wind speed at midflame height", "range": [0, 10], "SI_unit": None},
-    "slope": {"long_name": "Slope angle", "range": [0, 60], "SI_unit": None},
+    "slope_tan": {"long_name": "Slope angle", "range": [-1.7, 1.7], "SI_unit": None},
     'Ta': {"long_name": "Ambient temperature", "range": [280.0, 310.0], "SI_unit": None},
     'airDens': {"long_name": "Air density", "range": [0.825, 1.225], "SI_unit": None},
     
@@ -97,6 +97,7 @@ unit_representation = {
     'kJms': 'kJ/m²/s',
     'deg': '°',
     'rad': 'rad',
+    'tan': 'ratio',
     'degK': 'K',
     'm': 'm',
     'r': 'ratio',
@@ -188,6 +189,7 @@ class model_parameters:
         # Conversion factors
         self.to_metric = {unit: lambda x, factor=factor: np.multiply(x, factor) for unit, factor in convert_metric.items()}
         self.from_metric = {unit: lambda x, factor=factor: np.divide(x, factor) for unit, factor in convert_metric.items()}
+        self.to_metric['tan'] = lambda x: math.atan(x) * 180 / math.pi
       
        # self.to_metric = {unit: lambda x, factor=factor: x * factor for unit, factor in convert_metric.items()}
        # self.from_metric = {unit: lambda x, factor=factor: x / factor for unit, factor in convert_metric.items()}

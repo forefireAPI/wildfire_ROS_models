@@ -34,7 +34,7 @@ def get_values_Balbi2020(input_dict):
 
 ROS_models = {
     "Rothermel1972": { "get_values":Rothermel1972, "get_set": Rothermel1972_valuesset},
-    "AndrewsRothermel2017": { "get_values":RothermelAndrews2018, "get_set": RothermelAndrews2018_valuesset},
+    "RothermelAndrews2018": { "get_values":RothermelAndrews2018, "get_set": RothermelAndrews2018_valuesset},
     "Balbi2020": { "get_values":Balbi2020, "get_set": Balbi2020_valuesset}
 }
 

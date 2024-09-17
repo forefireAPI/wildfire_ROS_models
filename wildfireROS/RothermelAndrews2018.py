@@ -115,8 +115,6 @@ def RothermelAndrews2018(Z, print_calculus = False):
     st = Z.totMineral_r  # Fuel particle mineral content
     se = Z.effectMineral_r  # Fuel Particle effective mineral content
     mois_ext = Z.Dme_r  # Moisture content of extinction
-    wind = Z.wind_ftmin # wind velocity at mid flame
-    import pdb; pdb.set_trace()
     slope_rad = math.radians(Z.slope_deg) # slope angle 
     
     
@@ -174,7 +172,10 @@ def RothermelAndrews2018(Z, print_calculus = False):
         WC = (C * wv ** B) * math.pow((Beta / Beta_op), (-E))
         #WC= WC*0.74
         #Slope  coefficient
-        SC = 5.275*(Beta**-0.3)*tan_slope**2
+        if tan_slope >= 0:
+            SC = 5.275*(Beta**-0.3)*tan_slope**2
+        else:
+            SC = 0
         #Heat sink
 
         EHN = math.exp(-138. / fpsa)  # Effective Heating Number = f(surface are volume ratio)

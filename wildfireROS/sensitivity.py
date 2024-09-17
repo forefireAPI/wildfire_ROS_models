@@ -21,6 +21,7 @@ from sklearn.model_selection import train_test_split
     
 def generate_problem_set(model_key, kind_of_parameter = ["environment","typical","fuelstate"], result_var="ROS", N=10000, val_prop=None):
 
+
     modelVSet  =  ROS_models[model_key]["get_set"]()
     
     fm = {}
@@ -95,7 +96,7 @@ def sobol_analysis(problem_set, lookat='results'):
     y_pos = np.arange(len(params))
     return Si, params, y_pos, model_name
 
-def plot_sobol_indices(Si, params, y_pos, model_name):
+def plot_sobol_indices(Si, params="", y_pos=0, model_name=""):
     plt.figure(figsize=(10, 5))
 
     # Plotting first-order indices

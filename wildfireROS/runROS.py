@@ -22,7 +22,7 @@ def get_values_Rothermel1972(input_dict):
     model_path = 'path_to_Rothermel1972_model'
     return predict_single_output(model_path, input_dict)
 
-def get_values_AndrewsRothermel2017(input_dict):
+def get_values_AxndrewsRothermel2017(input_dict):
     model_path = 'path_to_AndrewsRothermel2017_model'
     return predict_single_output(model_path, input_dict)
 

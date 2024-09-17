@@ -30,5 +30,12 @@ Contributions to the library are welcome. Especially add models by copy pasting 
 ## License
 GPL
 
+## Some refs
+https://github.com/EcoFire/firebehavioR/tree/master/data
+Hourly FFMC
+https://github.com/nrcan-cfs-fire/cffdrs-ng
+
+
+
 ## Contact
 Jean-Baptiste Filippi - SPE - filippi_j@univ-corse.fr

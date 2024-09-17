@@ -37,6 +37,7 @@ def main(args):
     # Sensibility analysis of the target ROS model
     logger.info('Run sensibility analysis of target ROS model')
     Si_ros, params, y_pos, model_name = sobol_analysis(problem_set, lookat='results')
+    plot_sobol_indices(Si_ros, params, y_pos, model_name)
 
     # Load neural network
     if nn_model_path.split('.')[-1] == 'ffann':
@@ -52,7 +53,6 @@ def main(args):
     logger.info('Run sensibility analysis of NN model')
     Si_nn, params, y_pos, model_name = sobol_analysis(problem_set, lookat='results_emulation')
 
-    plot_sobol_indices(Si_ros, params, y_pos, model_name)
     plot_sobol_indices(Si_nn, params, y_pos, model_name)
     plt.show()
 

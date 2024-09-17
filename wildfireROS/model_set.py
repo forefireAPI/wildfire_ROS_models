@@ -53,7 +53,7 @@ var_properties = {
  
     # Environment parameters
     "wind": {"long_name": "Wind speed at midflame height", "range": [0, 10], "SI_unit": None},
-    "slope_tan": {"long_name": "Slope angle", "range": [-2.7, 2.7], "SI_unit": None},
+    "slope_tan": {"long_name": "Slope angle", "range": [-1.7, 1.7], "SI_unit": None},
     'Ta': {"long_name": "Ambient temperature", "range": [280.0, 310.0], "SI_unit": None},
     'airDens': {"long_name": "Air density", "range": [0.825, 1.225], "SI_unit": None},
     

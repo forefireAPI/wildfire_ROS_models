@@ -61,7 +61,6 @@ def main(args):
     # Prediction on validation set
     logger.info('Compute predictions')
     problem_set = add_results_emulation(problem_set, model)
-    pdb.set_trace()
     
     # Sensibility analysis of the emulator
     logger.info('Run sensibility analysis of NN model')

@@ -13,7 +13,7 @@ License: GPL
 """
 import math
 import numpy as np
- 
+
    
 var_properties = {
     "CODE": {"long_name": "Shortname - code", "range": None, "SI_unit": None},
@@ -56,6 +56,7 @@ var_properties = {
     "slope_tan": {"long_name": "Slope angle", "range": [-1.7, 1.7], "SI_unit": None},
     'Ta': {"long_name": "Ambient temperature", "range": [280.0, 310.0], "SI_unit": None},
     'airDens': {"long_name": "Air density", "range": [0.825, 1.225], "SI_unit": None},
+
     
     # Model Parameters
     "totMineral_r": {"long_name": "Total fuel particle mineral relative content", "range": [0.5, 0.6], "SI_unit": None},
@@ -74,8 +75,8 @@ var_properties = {
     'g': {"long_name": "Acceleration due to gravity", "range": None, "SI_unit": None},
     
     ## Output Parameters
-    "ROS": {"long_name": "Rate of Spread", "range": None, "SI_unit": None},
-    "FllH": {"long_name": "Flame height", "range": None, "SI_unit": None},
+    "ROS": {"long_name": "Rate of Spread", "range": None, "SI_unit": "mps"},
+    "FllH": {"long_name": "Flame height", "range": None, "SI_unit": "m"},
     "PR": {"long_name": "Propagating flux", "range": None, "SI_unit": None},
     "FI": {"long_name": "Reaction intensity", "range": None, "SI_unit": None}    
 }
@@ -155,7 +156,7 @@ class model_parameters:
     Unit shortnames :
     
     Provided Units:
-    - ftft2    : Surface to Volume ratio (ft^2/ft^3)
+    - ftinv    : Surface to Volume ratio (ft^2/ft^3)
     - ft      : Length (feet)
     - lb      : Weight (pounds)
     - tac     : Load (tons per acre)
@@ -169,7 +170,7 @@ class model_parameters:
     - BTUlb    : Heat content BTU per pound
     
     Metric System Equivalents:
-    - mm1     : Surface to Volume ratio (m^2/m^3) 
+    - minv     : Surface to Volume ratio (m^2/m^3) 
     - m       : Length (meters)
     - kg      : Weight (kilograms)
     - kgm3   : Density (kilograms per cubic meter)
@@ -191,8 +192,6 @@ class model_parameters:
         self.from_metric = {unit: lambda x, factor=factor: np.divide(x, factor) for unit, factor in convert_metric.items()}
         self.to_metric['tan'] = lambda x: math.atan(x) * 180 / math.pi
       
-       # self.to_metric = {unit: lambda x, factor=factor: x * factor for unit, factor in convert_metric.items()}
-       # self.from_metric = {unit: lambda x, factor=factor: x / factor for unit, factor in convert_metric.items()}
         self.metric_params = {}
         self.load(params)
 

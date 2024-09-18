@@ -1,27 +1,41 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+Sensitivity Analysis Script for wildfireROS Models
+
+This script provides helper functions to perform and plot sensitivity analysis
+using the Sobol method.
+
 Created on Wed Nov 22 12:14:58 2023
 
-helper functions to perform and plot sensitivity analysis
-
-@author: filippi_j
+Author: filippi_j, Thoreau_r
 """
 
-from SALib.analyze import sobol
-from SALib.sample import sobol as sobolsample
-
-from .runROS import ROS_models
-from .model_set import model_parameters, var_properties
-
+import argparse
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import train_test_split
+from SALib.analyze import sobol
+from SALib.sample import sobol as sobolsample
+from wildfireROS.runROS import ROS_models
+from wildfireROS.model_set import model_parameters, var_properties
 
     
 def generate_problem_set(model_key, kind_of_parameter = ["environment","typical","fuelstate","model"], result_var="ROS", N=10000, val_prop=None, param_names=None):
+    """
+    Generate a problem set for sensitivity analysis using the Sobol method.
 
-    modelVSet  =  ROS_models[model_key]["get_set"]()
+    Parameters:
+        model_key (str): Key identifying the ROS model.
+        kind_of_parameter (list): List of parameter categories to include.
+        result_var (str): The result variable to analyze.
+        N (int): Number of samples to generate.
+        val_prop (float): Proportion of validation data.
+
+    Returns:
+        dict: A dictionary containing the problem setup and results.
+    """
+    modelVSet  = ROS_models[model_key]["get_set"]()
     
     fm = {}
     for key in modelVSet.keys():
@@ -40,7 +54,7 @@ def generate_problem_set(model_key, kind_of_parameter = ["environment","typical"
         del ordered_fm_var_set
         
     problem = {
-        'model_name':model_key,
+        'model_name': model_key,
         'num_vars': len(fm_var_set.keys()),
         'names': list(fm_var_set.keys()),
         'bounds': [var_properties[name]["range"] for name in fm_var_set.keys()]
@@ -74,27 +88,45 @@ def generate_problem_set(model_key, kind_of_parameter = ["environment","typical"
     
     return problem
 
-
-
 def verify_error(problem_set, lookat="results"):
+    """
+    Verify the error between the model's results and the generated problem set.
+
+    Parameters:
+        problem_set (dict): The problem set containing inputs and results.
+        lookat (str): The key to look at in the problem set.
+
+    Returns:
+        float: The average absolute error.
+    """
     model_key = problem_set["model_name"]
-    modelVSet  =  ROS_models[model_key]["get_set"]()
+    modelVSet  = ROS_models[model_key]["get_set"]()
     fm = model_parameters()
     diff = 0
     numSamples = len(problem_set[lookat])
     for key in modelVSet.keys():
-        fm = fm+modelVSet[key]
-    for I in range(numSamples):
-        input_values = problem_set["input"][I]
-        for i, param_name in enumerate(problem_set['names']):
-            fm[param_name] = input_values[i]
+        fm = fm + modelVSet[key]
+    for i in range(numSamples):
+        input_values = problem_set["input"][i]
+        for j, param_name in enumerate(problem_set['names']):
+            fm[param_name] = input_values[j]
             
         result = model_parameters(ROS_models[model_key]["get_values"](fm))
-        diff = diff + abs(result[problem_set["result_var"]] - problem_set[lookat][I])
+        diff += abs(result[problem_set["result_var"]] - problem_set[lookat][i])
          
-    return diff/numSamples
-            
+    return diff / numSamples
+
 def sobol_analysis(problem_set, lookat='results'):
+    """
+    Perform Sobol sensitivity analysis on the problem set.
+
+    Parameters:
+        problem_set (dict): The problem set containing inputs and results.
+        lookat (str): The key to look at in the problem set.
+
+    Returns:
+        tuple: Sobol indices, parameter names, y positions, and model name.
+    """
     Si = sobol.analyze(problem_set, problem_set[lookat])
     params = problem_set['names']    
     model_name = problem_set["model_name"]
@@ -102,6 +134,15 @@ def sobol_analysis(problem_set, lookat='results'):
     return Si, params, y_pos, model_name
 
 def plot_sobol_indices(Si, params, y_pos, model_name):
+    """
+    Plot the Sobol sensitivity indices.
+
+    Parameters:
+        Si (dict): Sobol indices.
+        params (list): List of parameter names.
+        y_pos (numpy.ndarray): Positions for the y-axis.
+        model_name (str): Name of the model.
+    """
     plt.figure(figsize=(10, 5))
 
     # Plotting first-order indices
@@ -120,6 +161,39 @@ def plot_sobol_indices(Si, params, y_pos, model_name):
     plt.title(f"Total-effect {model_name}")
 
     plt.tight_layout()
+    plt.show()
 
+def main():
+    """
+    Main function to perform sensitivity analysis.
+    """
+    parser = argparse.ArgumentParser(description="Perform sensitivity analysis on wildfireROS models.")
+    parser.add_argument('--model', type=str, required=True, help='Model key (e.g., "RothermelAndrews2018")')
+    parser.add_argument('--N', type=int, default=10000, help='Number of samples for Sobol analysis')
+    parser.add_argument('--val_prop', type=float, default=None, help='Proportion of validation data')
+    parser.add_argument('--result_var', type=str, default="ROS", help='Result variable to analyze')
+    parser.add_argument('--plot', action='store_true', help='Whether to plot the Sobol indices')
 
-    
+    args = parser.parse_args()
+
+    # Generate problem set
+    problem_set = generate_problem_set(
+        model_key=args.model,
+        result_var=args.result_var,
+        N=args.N,
+        val_prop=args.val_prop
+    )
+
+    # Perform Sobol analysis
+    Si_ros, params, y_pos, model_name = sobol_analysis(problem_set)
+
+    # Optionally plot the results
+    if args.plot:
+        plot_sobol_indices(Si_ros, params, y_pos, model_name)
+
+    # Optionally verify error
+    error = verify_error(problem_set)
+    print(f"Average Absolute Error: {error}")
+
+if __name__ == "__main__":
+    main()

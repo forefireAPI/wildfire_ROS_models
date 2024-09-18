@@ -2,9 +2,9 @@
 Ex: python train_nn.py --root /home/ai4geo/Documents/nn_ros_models --target_ros_model RothermelAndrews2018 --n_samples 10000 --epochs 200 --overwrite
 """
 
-from wildfireROS.sensitivity import generate_problem_set
-from wildfireROS.neuralNetROS import *
-from wildfireROS.utils import *
+from wildfire_ROS_models.sensitivity import generate_problem_set
+from wildfire_ROS_models.neuralNetROS import *
+from wildfire_ROS_models.utils import *
 
 import os
 import sys
@@ -47,7 +47,11 @@ def main(args):
     else:
         logger.info('Create training data set')
         stime = time.time()
-        train_set = generate_problem_set(target_ros_model,  N=n_train_samples, val_prop=train_config['val_prop'])
+        train_set = generate_problem_set(
+            target_ros_model,  
+            N=n_train_samples, 
+            val_prop=train_config['val_prop'], 
+            selected_params=args.selected_params)
         ptime = (time.time() - stime) / 60
         logger.info(f'Built data in {ptime:.2f}min') 
         if train_data_path is not None:
@@ -101,5 +105,16 @@ if __name__ == '__main__':
     parser.add_argument('--patience', type=int, default=10,
                         help='Number of epochs after which training is stopped if validation loss keeps increasing')
     parser.add_argument('--overwrite', action='store_true', help='Whether to overwrite trained model')
-    args = parser.parse_args()    
+    args = parser.parse_args()
+    
+    if args.target_ros_model == 'RothermelAndrews2018':
+        args.selected_params = [
+            "fl1h_tac",
+            "fd_ft",
+            "Dme_pc",
+            "SAVcar_ftinv",
+            "mdOnDry1h_r",
+            "wind",
+            "slope_tan"]
+     
     main(args)

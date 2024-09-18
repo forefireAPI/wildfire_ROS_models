@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Sensitivity Analysis Script for wildfireROS Models
+Sensitivity Analysis Script for wildfire_ROS_models Models
 
 This script trains a ROS model emulator and performs sensitivity analysis using the Sobol method.
 
@@ -17,9 +17,9 @@ import time
 
 import matplotlib.pyplot as plt
 
-from wildfireROS.sensitivity import generate_problem_set, plot_sobol_indices, sobol_analysis
-from wildfireROS.neuralNetROS import load_model_structure, add_results_emulation
-from wildfireROS.utils import *
+from wildfire_ROS_models.sensitivity import generate_problem_set, plot_sobol_indices, sobol_analysis
+from wildfire_ROS_models.neuralNetROS import load_model_structure, add_results_emulation
+from wildfire_ROS_models.utils import *
 
 import tensorflow as tf  # Ensure TensorFlow is installed
 

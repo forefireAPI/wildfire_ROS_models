@@ -94,10 +94,10 @@ def Rothermel1972(Z, print_calculus = False):
 
 def RothermelAndrews2018_valuesset():
     return {"identification":{'CODE': 'A4'},
-            "typical": {'H': 18608.0,'SAVcar': 5705.380577427821, 'fd': 1.8, 'fuelDens': 512.592,'Dme_pc': 20},
+            "typical": {'H_BTUlb': 18608.0,'SAVcar_ftinv': 5705.380577427821, 'fd_ft': 1.8, 'fuelDens_lbft3': 512.592,'Dme_pc': 20},
             "fuelstate": {'fl1h_tac': 0.4},
-            "environment":  {'wind':10,'slope_tan':0,'mdOnDry1h':0.06},
-            "model": {'totMineral': 0.0555, 'effectMineral': 0.01},
+            "environment":  {'wind':10,'slope_tan':0,'mdOnDry1h_r':0.06},
+            "model": {'totMineral_r': 0.0555, 'effectMineral_r': 0.01},
             "constants": {}
             }
 

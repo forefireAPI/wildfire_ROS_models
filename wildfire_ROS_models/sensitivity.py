@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Sensitivity Analysis Script for wildfireROS Models
+Sensitivity Analysis Script for wildfire_ROS_models Models
 
 This script provides helper functions to perform and plot sensitivity analysis
 using the Sobol method.
@@ -17,11 +17,11 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from SALib.analyze import sobol
 from SALib.sample import sobol as sobolsample
+from wildfire_ROS_models.runROS import ROS_models
+from wildfire_ROS_models.model_set import model_parameters, var_properties
 
-from wildfireROS.runROS import ROS_models
-from wildfireROS.model_set import model_parameters, var_properties
 
-def generate_problem_set(model_key, kind_of_parameter=["environment","typical","fuelstate"], result_var="ROS", N=10000, val_prop=None):
+def generate_problem_set(model_key, kind_of_parameter = ["environment","typical","fuelstate","model"], result_var="ROS", N=10000, val_prop=None, selected_params=None):
     """
     Generate a problem set for sensitivity analysis using the Sobol method.
 
@@ -31,6 +31,7 @@ def generate_problem_set(model_key, kind_of_parameter=["environment","typical","
         result_var (str): The result variable to analyze.
         N (int): Number of samples to generate.
         val_prop (float): Proportion of validation data.
+        selected_params (list): selection of parameters to use. 
 
     Returns:
         dict: A dictionary containing the problem setup and results.
@@ -46,6 +47,12 @@ def generate_problem_set(model_key, kind_of_parameter=["environment","typical","
     for key in kind_of_parameter:
         for var_key in modelVSet[key]:
             fm_var_set[var_key] = modelVSet[key][var_key]
+
+    if selected_params is not None:
+        ordered_fm_var_set = {k: fm_var_set[k] for k in selected_params}
+        del fm_var_set
+        fm_var_set = ordered_fm_var_set
+        del ordered_fm_var_set
         
     problem = {
         'model_name': model_key,
@@ -155,13 +162,13 @@ def plot_sobol_indices(Si, params, y_pos, model_name):
     plt.title(f"Total-effect {model_name}")
 
     plt.tight_layout()
-    plt.show()
+
 
 def main():
     """
     Main function to perform sensitivity analysis.
     """
-    parser = argparse.ArgumentParser(description="Perform sensitivity analysis on wildfireROS models.")
+    parser = argparse.ArgumentParser(description="Perform sensitivity analysis on wildfire_ROS_models models.")
     parser.add_argument('--model', type=str, required=True, help='Model key (e.g., "RothermelAndrews2018")')
     parser.add_argument('--N', type=int, default=10000, help='Number of samples for Sobol analysis')
     parser.add_argument('--val_prop', type=float, default=None, help='Proportion of validation data')

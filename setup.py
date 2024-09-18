@@ -14,7 +14,8 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/forefireAPI/wildfire_ROS_models/",  # Replace with your repo URL
-    packages=find_packages(),
+    packages=['wildfire_ROS_models'],
+    package_dir={'wildfire_ROS_models': 'wildfire_ROS_models'},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",  # Choose your license
@@ -31,7 +32,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'sensitivity_analysis=wildfireROS.scripts.sensitivity_analysis:main',
+            'sensitivity_analysis=wildfire_ROS_models.scripts.sensitivity_analysis:main',
         ],
     },
     include_package_data=True,

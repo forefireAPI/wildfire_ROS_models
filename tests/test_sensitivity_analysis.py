@@ -2,19 +2,19 @@
 
 import unittest
 from unittest.mock import patch, MagicMock
-from wildfireROS.scripts.sensitivity_analysis import generate_problem_set, plot_sobol_indices, sobol_analysis, main
-from wildfireROS.neuralNetROS import load_model_structure, add_results_emulation
+from wildfire_ROS_models.scripts.sensitivity_analysis import generate_problem_set, plot_sobol_indices, sobol_analysis, main
+from wildfire_ROS_models.neuralNetROS import load_model_structure, add_results_emulation
 
 import matplotlib.pyplot as plt
 
 class TestSensitivityAnalysis(unittest.TestCase):
 
-    @patch('wildfireROS.sensitivity.generate_problem_set')
-    @patch('wildfireROS.sensitivity.sobol_analysis')
-    @patch('wildfireROS.sensitivity.plot_sobol_indices')
-    @patch('wildfireROS.neuralNetROS.load_model_structure')
-    @patch('wildfireROS.neuralNetROS.tf.keras.models.load_model')
-    @patch('wildfireROS.neuralNetROS.add_results_emulation')
+    @patch('wildfire_ROS_models.sensitivity.generate_problem_set')
+    @patch('wildfire_ROS_models.sensitivity.sobol_analysis')
+    @patch('wildfire_ROS_models.sensitivity.plot_sobol_indices')
+    @patch('wildfire_ROS_models.neuralNetROS.load_model_structure')
+    @patch('wildfire_ROS_models.neuralNetROS.tf.keras.models.load_model')
+    @patch('wildfire_ROS_models.neuralNetROS.add_results_emulation')
     def test_main(self, mock_add_results_emulation, mock_load_model, mock_load_model_structure,
                   mock_plot_sobol_indices, mock_sobol_analysis, mock_generate_problem_set):
         """Test the main function of the sensitivity_analysis script."""

@@ -19,22 +19,22 @@ var_properties = {
     "CODE": {"long_name": "Shortname - code", "range": None, "SI_unit": None},
     "INDEX": {"long_name": "Integer used as classification number", "range": None, "SI_unit": None},
     
-    # Fuel Characteristic Parameters
+    # Fuel Characteristic Parameters - do not vary in time
     "ftype": {"long_name": "S for static, D for dynamic, N for Non applicable", "range": None, "SI_unit": None},
     "SAV1h": {"long_name": "Surface-area-to-volume ratio for 1h fuel", "range": [5000.0, 7000.0], "SI_unit": "minv"},
     "SAV10h": {"long_name": "Surface-area-to-volume ratio for 10h fuel", "range": [4000.0, 6000.0], "SI_unit": "minv"},
     "SAV100h": {"long_name": "Surface-area-to-volume ratio for 100h fuel", "range": [4000.0, 6000.0], "SI_unit": "minv"},
     "SAVLDherb": {"long_name": "Surface-area-to-volume ratio for live and dead herbaceous", "range": [4000.0, 6000.0], "SI_unit": "minv"},
     "SAVLwood": {"long_name": "Surface-area-to-volume ratio for live woody", "range": [4000.0, 6000.0], "SI_unit": "minv"},
-    "SAVcar": {"long_name": "Characteristic SAV", "range": [5000.0, 7000.0], "SI_unit": "minv"},
-    "fd": {"long_name": "Fuel bed depth", "range": [0.1, 2], "SI_unit": "m"},
+    "SAVcar_ftinv": {"long_name": "Characteristic SAV", "range": [1000.0, 1700.0], "SI_unit": "minv"},
+    "fd_ft": {"long_name": "Fuel bed depth", "range": [0.5, 6.0], "SI_unit": "m"},
     "H": {"long_name": "Heat content", "range": [15000.0, 20000.0], "SI_unit": "kJkg"},
     "bulkDens": {"long_name": "Bulk density", "range": [0.5, 16.0], "SI_unit": "kgm3"},
     "packRatio": {"long_name": "Relative packing ratio", "range": [0.001,0.05], "SI_unit": "r"},
     "fuelDens": {"long_name": "Ovendry fuel particle density", "range": [400.0, 600.0], "SI_unit": "kgm3"},
     'Tau0': {"long_name": "Flame residence time", "range": [60000, 80000], "SI_unit": "spm"},
     
-    # Fuel State parameter
+    # Fuel State parameter - vary in time
     "fl1h_tac": {"long_name": "Ovendry 1h fuel load", "range": [0.1, 5], "SI_unit": None},
     "fl10h": {"long_name": "Ovendry 10h fuel load", "range": [0.1, 5], "SI_unit": None},
     "fl100h": {"long_name": "Ovendry 100h fuel load", "range": [0.1, 5], "SI_unit": None},
@@ -42,7 +42,7 @@ var_properties = {
     "flLwood": {"long_name": "Live woody load", "range": [0.1, 5], "SI_unit": None},
     "Dme_pc": {"long_name": "Dead fuel moisture of extinction", "range": [10, 50], "SI_unit": None},
     'Cpf': {"long_name": "Specific heat of fuel", "range": [1500, 2500], "SI_unit": None},
-    "mdOnDry1h": {"long_name": "1 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 0.4], "SI_unit": None},
+    "mdOnDry1h_r": {"long_name": "1 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 0.4], "SI_unit": None},
     "mdOnDry10h": {"long_name": "10 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 1], "SI_unit": None},
     "mdOnDry100h": {"long_name": "100 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 1], "SI_unit": None},
     "mdOnTotal1h": {"long_name": "1 hour fuel moisture expressed as ratio on total mass basis", "range": [0.0, 1], "SI_unit": None},
@@ -59,15 +59,15 @@ var_properties = {
 
     
     # Model Parameters
-    "totMineral": {"long_name": "Total fuel particle mineral relative content", "range": None, "SI_unit": "r"},
-    "effectMineral": {"long_name": "Effective (silica-free) mineral relative content", "range": None, "SI_unit": "r"},
-    'Ti': {"long_name": "Ignition temperature", "range": None, "SI_unit": "degK"},
-    'Tvap': {"long_name": "Vaporisation temperature", "range": None, "SI_unit": "degK"},
-    'hEvap': {"long_name": "Heat of latent evaporation", "range": None, "SI_unit": "kJkg"},
-    'Cpa': {"long_name": "Specific heat of air", "range": None, "SI_unit": "JkgK"},
-    'X0': {"long_name": "Radiative factor", "range": None, "SI_unit": "r"},
-    'K1': {"long_name": "Drag coefficient", "range": None, "SI_unit": "spm"},
-    'st': {"long_name": "Air–pyrolysis gas mass ratio in the flame body", "range": None, "SI_unit": "r"},
+    "totMineral_r": {"long_name": "Total fuel particle mineral relative content", "range": None, "SI_unit": None},
+    "effectMineral_r": {"long_name": "Effective (silica-free) mineral relative content", "range": None, "SI_unit": None},
+    'Ti': {"long_name": "Ignition temperature", "range": None, "SI_unit": None},
+    'Tvap': {"long_name": "Vaporisation temperature", "range": None, "SI_unit": None},
+    'hEvap': {"long_name": "Heat of latent evaporation", "range": None, "SI_unit": None},
+    'Cpa': {"long_name": "Specific heat of air", "range": None, "SI_unit": None},
+    'X0': {"long_name": "Radiative factor", "range": None, "SI_unit": None},
+    'K1': {"long_name": "Drag coefficient", "range": None, "SI_unit": None},
+    'st': {"long_name": "Air–pyrolysis gas mass ratio in the flame body", "range": None, "SI_unit": None},
     'r00': {"long_name": "Model coefficient", "range": None, "SI_unit": None},
     
     # Constants

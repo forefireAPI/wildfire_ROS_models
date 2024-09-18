@@ -26,11 +26,6 @@ def train_wildfire_speed_emulator(model, problem, model_path, config):
     # Extracting data
     X = problem['input']  # Feature matrix
     y = problem['results']  # Target values
-    
-    input_shape=(X.shape[1],)
-    
-    model = tf.keras.Sequential()
-    model.add(tf.keras.layers.Dense(nlayers[0], activation='relu', input_shape=input_shape))
 
     l1_reg = tf.keras.regularizers.l1(config['l1_reg_coeff'])
     for layer in model.layers:
@@ -38,7 +33,6 @@ def train_wildfire_speed_emulator(model, problem, model_path, config):
 
     # Define SGD algorithm
     optimizer = tf.keras.optimizers.Adam(learning_rate=config['learning_rate'])
-
 
     # Compile the model for regression
     model.compile(
@@ -71,6 +65,9 @@ def train_wildfire_speed_emulator(model, problem, model_path, config):
         validation_data=(X['val'], y['val']),
         callbacks=[earlyStopping, mcp_save, reduce_lr_loss])
 
+    model.save(model_path)  # Saving the model
+    return model
+
 
 
 def add_results_emulation(problem, model):
@@ -81,10 +78,14 @@ def add_results_emulation(problem, model):
     # Check if input_data dimensions match num_vars
     if input_data.shape[1] != problem['num_vars']:
         raise ValueError("Input data dimensions do not match the number of variables")
-  
-    predictions = NN_model["tf_model"].predict(input_data)
 
-    return predictions.flatten()  # Flatten in case predictions are in 2D array
+    # Make predictions
+    predictions = model.predict(input_data)
+
+    # Update the problem dictionary with predictions
+    problem['results_emulation'] = predictions.flatten()  # Flatten in case predictions are in 2D array
+
+    return problem
 
  
 

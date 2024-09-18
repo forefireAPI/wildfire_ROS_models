@@ -43,10 +43,6 @@ def main(args):
         "fd_ft",
         "Dme_pc",
         "SAVcar_ftinv",
-        "H_BTUlb",
-        "totMineral_r",
-        "effectMineral_r",
-        "fuelDens_lbft3",
         "mdOnDry1h_r",
         "wind",
         "slope_tan"]

@@ -19,22 +19,22 @@ var_properties = {
     "CODE": {"long_name": "Shortname - code", "range": None, "SI_unit": None},
     "INDEX": {"long_name": "Integer used as classification number", "range": None, "SI_unit": None},
     
-    # Fuel Characteristic Parameters
+    # Fuel Characteristic Parameters - do not vary in time
     "ftype": {"long_name": "S for static, D for dynamic, N for Non applicable", "range": None, "SI_unit": None},
-    "SAV1h": {"long_name": "Surface-area-to-volume ratio for 1h fuel", "range": [5000.0, 7000.0], "SI_unit": None},
-    "SAV10h": {"long_name": "Surface-area-to-volume ratio for 10h fuel", "range": [4000.0, 6000.0], "SI_unit": None},
-    "SAV100h": {"long_name": "Surface-area-to-volume ratio for 100h fuel", "range": [4000.0, 6000.0], "SI_unit": None},
-    "SAVLDherb": {"long_name": "Surface-area-to-volume ratio for live and dead herbaceous", "range": [4000.0, 6000.0], "SI_unit": None},
-    "SAVLwood": {"long_name": "Surface-area-to-volume ratio for live woody", "range": [4000.0, 6000.0], "SI_unit": None},
-    "SAVcar_ftinv": {"long_name": "Characteristic SAV", "range": [1000.0, 1700.0], "SI_unit": None},
-    "fd_ft": {"long_name": "Fuel bed depth", "range": [0.5, 6.0], "SI_unit": None},
-    "H_BTUlb": {"long_name": "Heat content", "range": [7500.0, 8500.0], "SI_unit": None},
-    "bulkDens": {"long_name": "Bulk density", "range": [0.5, 16.0], "SI_unit": None},
-    "packRatio": {"long_name": "Relative packing ratio", "range": [0.001,0.05], "SI_unit": None},
-    "fuelDens_lbft3": {"long_name": "Ovendry fuel particle density", "range": [27, 37], "SI_unit": None},
-    'Tau0': {"long_name": "Flame residence time", "range": [60000, 80000], "SI_unit": None},
+    "SAV1h": {"long_name": "Surface-area-to-volume ratio for 1h fuel", "range": [5000.0, 7000.0], "SI_unit": "minv"},
+    "SAV10h": {"long_name": "Surface-area-to-volume ratio for 10h fuel", "range": [4000.0, 6000.0], "SI_unit": "minv"},
+    "SAV100h": {"long_name": "Surface-area-to-volume ratio for 100h fuel", "range": [4000.0, 6000.0], "SI_unit": "minv"},
+    "SAVLDherb": {"long_name": "Surface-area-to-volume ratio for live and dead herbaceous", "range": [4000.0, 6000.0], "SI_unit": "minv"},
+    "SAVLwood": {"long_name": "Surface-area-to-volume ratio for live woody", "range": [4000.0, 6000.0], "SI_unit": "minv"},
+    "SAVcar_ftinv": {"long_name": "Characteristic SAV", "range": [1000.0, 1700.0], "SI_unit": "minv"},
+    "fd_ft": {"long_name": "Fuel bed depth", "range": [0.5, 6.0], "SI_unit": "m"},
+    "H": {"long_name": "Heat content", "range": [15000.0, 20000.0], "SI_unit": "kJkg"},
+    "bulkDens": {"long_name": "Bulk density", "range": [0.5, 16.0], "SI_unit": "kgm3"},
+    "packRatio": {"long_name": "Relative packing ratio", "range": [0.001,0.05], "SI_unit": "r"},
+    "fuelDens": {"long_name": "Ovendry fuel particle density", "range": [400.0, 600.0], "SI_unit": "kgm3"},
+    'Tau0': {"long_name": "Flame residence time", "range": [60000, 80000], "SI_unit": "spm"},
     
-    # Fuel State parameter
+    # Fuel State parameter - vary in time
     "fl1h_tac": {"long_name": "Ovendry 1h fuel load", "range": [0.1, 5], "SI_unit": None},
     "fl10h": {"long_name": "Ovendry 10h fuel load", "range": [0.1, 5], "SI_unit": None},
     "fl100h": {"long_name": "Ovendry 100h fuel load", "range": [0.1, 5], "SI_unit": None},
@@ -59,8 +59,8 @@ var_properties = {
 
     
     # Model Parameters
-    "totMineral_r": {"long_name": "Total fuel particle mineral relative content", "range": [0.5, 0.6], "SI_unit": None},
-    "effectMineral_r": {"long_name": "Effective (silica-free) mineral relative content", "range": [0.005, 0.015], "SI_unit": None},
+    "totMineral_r": {"long_name": "Total fuel particle mineral relative content", "range": None, "SI_unit": None},
+    "effectMineral_r": {"long_name": "Effective (silica-free) mineral relative content", "range": None, "SI_unit": None},
     'Ti': {"long_name": "Ignition temperature", "range": None, "SI_unit": None},
     'Tvap': {"long_name": "Vaporisation temperature", "range": None, "SI_unit": None},
     'hEvap': {"long_name": "Heat of latent evaporation", "range": None, "SI_unit": None},

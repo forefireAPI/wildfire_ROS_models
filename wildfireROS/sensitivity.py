@@ -20,7 +20,7 @@ from SALib.sample import sobol as sobolsample
 from wildfireROS.runROS import ROS_models
 from wildfireROS.model_set import model_parameters, var_properties
 
-    
+
 def generate_problem_set(model_key, kind_of_parameter = ["environment","typical","fuelstate","model"], result_var="ROS", N=10000, val_prop=None, param_names=None):
     """
     Generate a problem set for sensitivity analysis using the Sobol method.
@@ -161,7 +161,7 @@ def plot_sobol_indices(Si, params, y_pos, model_name):
     plt.title(f"Total-effect {model_name}")
 
     plt.tight_layout()
-    plt.show()
+
 
 def main():
     """

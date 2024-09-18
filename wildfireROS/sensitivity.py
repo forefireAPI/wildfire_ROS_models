@@ -21,7 +21,7 @@ from wildfireROS.runROS import ROS_models
 from wildfireROS.model_set import model_parameters, var_properties
 
 
-def generate_problem_set(model_key, kind_of_parameter = ["environment","typical","fuelstate","model"], result_var="ROS", N=10000, val_prop=None, param_names=None):
+def generate_problem_set(model_key, kind_of_parameter = ["environment","typical","fuelstate","model"], result_var="ROS", N=10000, val_prop=None, selected_params=None):
     """
     Generate a problem set for sensitivity analysis using the Sobol method.
 
@@ -31,6 +31,7 @@ def generate_problem_set(model_key, kind_of_parameter = ["environment","typical"
         result_var (str): The result variable to analyze.
         N (int): Number of samples to generate.
         val_prop (float): Proportion of validation data.
+        selected_params (list): selection of parameters to use. 
 
     Returns:
         dict: A dictionary containing the problem setup and results.
@@ -47,8 +48,8 @@ def generate_problem_set(model_key, kind_of_parameter = ["environment","typical"
         for var_key in modelVSet[key]:
             fm_var_set[var_key] = modelVSet[key][var_key]
 
-    if param_names is not None:
-        ordered_fm_var_set = {k: fm_var_set[k] for k in param_names}
+    if selected_params is not None:
+        ordered_fm_var_set = {k: fm_var_set[k] for k in selected_params}
         del fm_var_set
         fm_var_set = ordered_fm_var_set
         del ordered_fm_var_set

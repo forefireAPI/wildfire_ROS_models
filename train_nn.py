@@ -38,15 +38,6 @@ def main(args):
         'lr_scheduler': {'factor': 0.5, 'patience': 5, 'min_delta': 1e-4}
     }
 
-    param_names= [
-        "fl1h_tac",
-        "fd_ft",
-        "Dme_pc",
-        "SAVcar_ftinv",
-        "mdOnDry1h_r",
-        "wind",
-        "slope_tan"]
-
     # Create the training data:
     #   - Input data is sampled with Sobol indices
     #   - Target data is computed with target_ros_model, e.g. Rothermel 
@@ -60,7 +51,7 @@ def main(args):
             target_ros_model,  
             N=n_train_samples, 
             val_prop=train_config['val_prop'], 
-            param_names=param_names)
+            selected_params=args.selected_params)
         ptime = (time.time() - stime) / 60
         logger.info(f'Built data in {ptime:.2f}min') 
         if train_data_path is not None:
@@ -114,5 +105,16 @@ if __name__ == '__main__':
     parser.add_argument('--patience', type=int, default=10,
                         help='Number of epochs after which training is stopped if validation loss keeps increasing')
     parser.add_argument('--overwrite', action='store_true', help='Whether to overwrite trained model')
-    args = parser.parse_args()    
+    args = parser.parse_args()
+    
+    if args.target_ros_model == 'RothermelAndrews2018':
+        args.selected_params = [
+            "fl1h_tac",
+            "fd_ft",
+            "Dme_pc",
+            "SAVcar_ftinv",
+            "mdOnDry1h_r",
+            "wind",
+            "slope_tan"]
+     
     main(args)

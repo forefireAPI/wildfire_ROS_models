@@ -19,7 +19,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
     
-def generate_problem_set(model_key, kind_of_parameter = ["environment","typical","fuelstate"], result_var="ROS", N=10000, val_prop=None):
+def generate_problem_set(model_key, kind_of_parameter = ["environment","typical","fuelstate","model"], result_var="ROS", N=10000, val_prop=None, param_names=None):
 
     modelVSet  =  ROS_models[model_key]["get_set"]()
     
@@ -32,6 +32,12 @@ def generate_problem_set(model_key, kind_of_parameter = ["environment","typical"
     for key in kind_of_parameter:
         for var_key in modelVSet[key]:
             fm_var_set[var_key] = modelVSet[key][var_key]
+
+    if param_names is not None:
+        ordered_fm_var_set = {k: fm_var_set[k] for k in param_names}
+        del fm_var_set
+        fm_var_set = ordered_fm_var_set
+        del ordered_fm_var_set
         
     problem = {
         'model_name':model_key,

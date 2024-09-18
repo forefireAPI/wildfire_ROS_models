@@ -26,12 +26,12 @@ var_properties = {
     "SAV100h": {"long_name": "Surface-area-to-volume ratio for 100h fuel", "range": [4000.0, 6000.0], "SI_unit": None},
     "SAVLDherb": {"long_name": "Surface-area-to-volume ratio for live and dead herbaceous", "range": [4000.0, 6000.0], "SI_unit": None},
     "SAVLwood": {"long_name": "Surface-area-to-volume ratio for live woody", "range": [4000.0, 6000.0], "SI_unit": None},
-    "SAVcar": {"long_name": "Characteristic SAV", "range": [5000.0, 7000.0], "SI_unit": None},
-    "fd": {"long_name": "Fuel bed depth", "range": [0.1, 2], "SI_unit": None},
-    "H": {"long_name": "Heat content", "range": [15000.0, 20000.0], "SI_unit": None},
+    "SAVcar_ftinv": {"long_name": "Characteristic SAV", "range": [1000.0, 1700.0], "SI_unit": None},
+    "fd_ft": {"long_name": "Fuel bed depth", "range": [0.5, 6.0], "SI_unit": None},
+    "H_BTUlb": {"long_name": "Heat content", "range": [7500.0, 8500.0], "SI_unit": None},
     "bulkDens": {"long_name": "Bulk density", "range": [0.5, 16.0], "SI_unit": None},
     "packRatio": {"long_name": "Relative packing ratio", "range": [0.001,0.05], "SI_unit": None},
-    "fuelDens": {"long_name": "Ovendry fuel particle density", "range": [400.0, 600.0], "SI_unit": None},
+    "fuelDens_lbft3": {"long_name": "Ovendry fuel particle density", "range": [27, 37], "SI_unit": None},
     'Tau0': {"long_name": "Flame residence time", "range": [60000, 80000], "SI_unit": None},
     
     # Fuel State parameter
@@ -42,7 +42,7 @@ var_properties = {
     "flLwood": {"long_name": "Live woody load", "range": [0.1, 5], "SI_unit": None},
     "Dme_pc": {"long_name": "Dead fuel moisture of extinction", "range": [10, 50], "SI_unit": None},
     'Cpf': {"long_name": "Specific heat of fuel", "range": [1500, 2500], "SI_unit": None},
-    "mdOnDry1h": {"long_name": "1 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 0.4], "SI_unit": None},
+    "mdOnDry1h_r": {"long_name": "1 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 0.4], "SI_unit": None},
     "mdOnDry10h": {"long_name": "10 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 1], "SI_unit": None},
     "mdOnDry100h": {"long_name": "100 hour fuel moisture expressed as ratio on dry mass basis", "range": [0.0, 1], "SI_unit": None},
     "mdOnTotal1h": {"long_name": "1 hour fuel moisture expressed as ratio on total mass basis", "range": [0.0, 1], "SI_unit": None},
@@ -58,8 +58,8 @@ var_properties = {
     'airDens': {"long_name": "Air density", "range": [0.825, 1.225], "SI_unit": None},
     
     # Model Parameters
-    "totMineral": {"long_name": "Total fuel particle mineral relative content", "range": None, "SI_unit": None},
-    "effectMineral": {"long_name": "Effective (silica-free) mineral relative content", "range": None, "SI_unit": None},
+    "totMineral_r": {"long_name": "Total fuel particle mineral relative content", "range": [0.5, 0.6], "SI_unit": None},
+    "effectMineral_r": {"long_name": "Effective (silica-free) mineral relative content", "range": [0.005, 0.015], "SI_unit": None},
     'Ti': {"long_name": "Ignition temperature", "range": None, "SI_unit": None},
     'Tvap': {"long_name": "Vaporisation temperature", "range": None, "SI_unit": None},
     'hEvap': {"long_name": "Heat of latent evaporation", "range": None, "SI_unit": None},

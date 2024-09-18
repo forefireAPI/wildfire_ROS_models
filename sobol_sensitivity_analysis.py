@@ -28,9 +28,22 @@ def main(args):
         nn_model_path = os.path.join(args.root, 'nn_' + target_ros_model)
     n_train_samples = int(args.n_samples)
 
+    param_names= [
+        "fl1h_tac",
+        "fd_ft",
+        "Dme_pc",
+        "SAVcar_ftinv",
+        "H_BTUlb",
+        "totMineral_r",
+        "effectMineral_r",
+        "fuelDens_lbft3",
+        "mdOnDry1h_r",
+        "wind",
+        "slope_tan"]
+
     logger.info('Sample in input space with Sobol sequences')
     stime = time.time()
-    problem_set = generate_problem_set(target_ros_model,  N=n_train_samples)
+    problem_set = generate_problem_set(target_ros_model,  N=n_train_samples, param_names=param_names)
     ptime = (time.time() - stime) / 60
     logger.info(f'Sampled data in {ptime:.2f}min') 
 
@@ -44,10 +57,11 @@ def main(args):
         model, input_names, output_names = load_model_structure(nn_model_path)
     else:
         model = tf.keras.saving.load_model(nn_model_path)
-
+    # import pdb; pdb.set_trace()
     # Prediction on validation set
     logger.info('Compute predictions')
     problem_set = add_results_emulation(problem_set, model)
+    pdb.set_trace()
     
     # Sensibility analysis of the emulator
     logger.info('Run sensibility analysis of NN model')

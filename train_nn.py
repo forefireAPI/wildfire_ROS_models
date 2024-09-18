@@ -38,6 +38,19 @@ def main(args):
         'lr_scheduler': {'factor': 0.5, 'patience': 5, 'min_delta': 1e-4}
     }
 
+    param_names= [
+        "fl1h_tac",
+        "fd_ft",
+        "Dme_pc",
+        "SAVcar_ftinv",
+        "H_BTUlb",
+        "totMineral_r",
+        "effectMineral_r",
+        "fuelDens_lbft3",
+        "mdOnDry1h_r",
+        "wind",
+        "slope_tan"]
+
     # Create the training data:
     #   - Input data is sampled with Sobol indices
     #   - Target data is computed with target_ros_model, e.g. Rothermel 
@@ -47,7 +60,11 @@ def main(args):
     else:
         logger.info('Create training data set')
         stime = time.time()
-        train_set = generate_problem_set(target_ros_model,  N=n_train_samples, val_prop=train_config['val_prop'])
+        train_set = generate_problem_set(
+            target_ros_model,  
+            N=n_train_samples, 
+            val_prop=train_config['val_prop'], 
+            param_names=param_names)
         ptime = (time.time() - stime) / 60
         logger.info(f'Built data in {ptime:.2f}min') 
         if train_data_path is not None:

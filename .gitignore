@@ -160,4 +160,4 @@ cython_debug/
 #.idea/
 .DS_Store
 reference/
-wildfireROS/.DS_Store
+wildfire_ROS_models/.DS_Store

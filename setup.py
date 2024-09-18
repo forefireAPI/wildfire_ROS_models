@@ -32,7 +32,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'sensitivity_analysis=wildfireROS.scripts.sensitivity_analysis:main',
+            'sensitivity_analysis=wildfire_ROS_models.scripts.sensitivity_analysis:main',
         ],
     },
     include_package_data=True,

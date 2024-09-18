@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Tests for wildfireROS models.
+Tests for wildfire_ROS_models models.
 
 Created on Mon Nov 20 08:01:29 2023
 
@@ -11,10 +11,10 @@ Author: filippi_j
 import pytest
 import matplotlib.pyplot as plt
 import numpy as np
-from wildfireROS import fuels_database as fdb
-from wildfireROS.runROS import run_model, plot_results
-from wildfireROS.model_set import model_parameters
-from wildfireROS.sensitivity import plot_sobol_indices, generate_problem_set, sobol_analysis
+from wildfire_ROS_models import fuels_database as fdb
+from wildfire_ROS_models.runROS import run_model, plot_results
+from wildfire_ROS_models.model_set import model_parameters
+from wildfire_ROS_models.sensitivity import plot_sobol_indices, generate_problem_set, sobol_analysis
 
 @pytest.fixture(scope='module')
 def setup_plotting():

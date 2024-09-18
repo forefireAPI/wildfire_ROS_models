@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Sensitivity Analysis Script for wildfireROS Models
+Sensitivity Analysis Script for wildfire_ROS_models Models
 
 This script provides helper functions to perform and plot sensitivity analysis
 using the Sobol method.
@@ -17,8 +17,8 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from SALib.analyze import sobol
 from SALib.sample import sobol as sobolsample
-from wildfireROS.runROS import ROS_models
-from wildfireROS.model_set import model_parameters, var_properties
+from wildfire_ROS_models.runROS import ROS_models
+from wildfire_ROS_models.model_set import model_parameters, var_properties
 
 
 def generate_problem_set(model_key, kind_of_parameter = ["environment","typical","fuelstate","model"], result_var="ROS", N=10000, val_prop=None, selected_params=None):
@@ -168,7 +168,7 @@ def main():
     """
     Main function to perform sensitivity analysis.
     """
-    parser = argparse.ArgumentParser(description="Perform sensitivity analysis on wildfireROS models.")
+    parser = argparse.ArgumentParser(description="Perform sensitivity analysis on wildfire_ROS_models models.")
     parser.add_argument('--model', type=str, required=True, help='Model key (e.g., "RothermelAndrews2018")')
     parser.add_argument('--N', type=int, default=10000, help='Number of samples for Sobol analysis')
     parser.add_argument('--val_prop', type=float, default=None, help='Proportion of validation data')

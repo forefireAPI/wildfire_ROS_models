@@ -2,9 +2,9 @@
 Ex: python train_nn.py --root /home/ai4geo/Documents/nn_ros_models --target_ros_model RothermelAndrews2018 --n_samples 10000 --epochs 200 --overwrite
 """
 
-from wildfireROS.sensitivity import generate_problem_set
-from wildfireROS.neuralNetROS import *
-from wildfireROS.utils import *
+from wildfire_ROS_models.sensitivity import generate_problem_set
+from wildfire_ROS_models.neuralNetROS import *
+from wildfire_ROS_models.utils import *
 
 import os
 import sys

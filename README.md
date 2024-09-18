@@ -2,8 +2,8 @@
 
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
 ![Python Version](https://img.shields.io/badge/Python-3.7%2B-blue.svg)
-![GitHub Issues](https://img.shields.io/github/issues/yourusername/wildfireROS)
-![GitHub Stars](https://img.shields.io/github/stars/yourusername/wildfireROS?style=social)
+![GitHub Issues](https://img.shields.io/github/issues/yourusername/wildfire_ROS_models)
+![GitHub Stars](https://img.shields.io/github/stars/yourusername/wildfire_ROS_models?style=social)
 
 ## Table of Contents
 - [Overview](#overview)
@@ -45,8 +45,8 @@ The **Wildfire ROS Models Library** is a comprehensive Python package designed f
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/wildfireROS.git
-   cd wildfireROS
+   git clone https://github.com/yourusername/wildfire_ROS_models.git
+   cd wildfire_ROS_models
    ```
 
 2. **Create a Virtual Environment (Optional but Recommended):**
@@ -74,8 +74,8 @@ The **Wildfire ROS Models Library** is a comprehensive Python package designed f
 After installation, you can use the ROS models in your Python scripts as follows:
 
 ```python
-from wildfireROS.models import RothermelAndrews2018
-from wildfireROS.runROS import run_model, plot_results
+from wildfire_ROS_models.models import RothermelAndrews2018
+from wildfire_ROS_models.runROS import run_model, plot_results
 
 # Define model parameters
 parameters = {
@@ -103,7 +103,7 @@ python test_models.py
 ## Directory Structure
 
 ```
-wildfireROS/
+wildfire_ROS_models/
 │
 ├── __init__.py
 ├── Balbi2020.py
@@ -164,8 +164,8 @@ Contributions to the **Wildfire ROS Models Library** are welcome! Whether you're
 
 2. **Clone Your Fork:**
    ```bash
-   git clone https://github.com/yourusername/wildfireROS.git
-   cd wildfireROS
+   git clone https://github.com/yourusername/wildfire_ROS_models.git
+   cd wildfire_ROS_models
    ```
 
 3. **Create a New Branch:**

@@ -169,7 +169,7 @@ def main():
     Main function to perform sensitivity analysis.
     """
     parser = argparse.ArgumentParser(description="Perform sensitivity analysis on wildfire_ROS_models models.")
-    parser.add_argument('--model', type=str, required=True, help='Model key (e.g., "RothermelAndrews2018")')
+    parser.add_argument('--model', type=str, default="RothermelAndrews2018",  help='Model key (e.g., "RothermelAndrews2018")')
     parser.add_argument('--N', type=int, default=10000, help='Number of samples for Sobol analysis')
     parser.add_argument('--val_prop', type=float, default=None, help='Proportion of validation data')
     parser.add_argument('--result_var', type=str, default="ROS", help='Result variable to analyze')

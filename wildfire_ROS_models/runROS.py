@@ -88,5 +88,5 @@ def plot_results(resultSets, keyX, keyY):
     
     plt.legend()
     plt.grid(True)
-
+    plt.show() 
 

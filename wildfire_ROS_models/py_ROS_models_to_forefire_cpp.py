@@ -4,7 +4,10 @@ import json
 import tokenize
 from io import StringIO
 
-def generate_cpp_from_python(python_file_path, cpp_output_path, function_name, class_name):
+
+def generate_cpp_from_python(
+    python_file_path, cpp_output_path, function_name, class_name
+):
     """
     Generates a C++ class with a method translated from a Python function.
 
@@ -14,7 +17,7 @@ def generate_cpp_from_python(python_file_path, cpp_output_path, function_name, c
     :param class_name: Name of the C++ class to generate.
     """
     # Read the Python source code
-    with open(python_file_path, 'r') as file:
+    with open(python_file_path, "r") as file:
         python_code = file.read()
 
     # Extract comments with their line numbers
@@ -39,7 +42,11 @@ def generate_cpp_from_python(python_file_path, cpp_output_path, function_name, c
     for node in func_def.body:
         if isinstance(node, ast.Assign):
             target = node.targets[0]
-            if isinstance(node.value, ast.Attribute) and isinstance(node.value.value, ast.Name) and node.value.value.id == 'Z':
+            if (
+                isinstance(node.value, ast.Attribute)
+                and isinstance(node.value.value, ast.Name)
+                and node.value.value.id == "Z"
+            ):
                 var_name = target.id
                 z_attr = node.value.attr
                 z_assignments[var_name] = z_attr
@@ -52,13 +59,13 @@ def generate_cpp_from_python(python_file_path, cpp_output_path, function_name, c
     includes = [
         '#include "PropagationModel.h"',
         '#include "FireDomain.h"',
-        '#include <cmath>',
-        '#include <iostream>',
-        'using namespace std;',
-        ''
+        "#include <cmath>",
+        "#include <iostream>",
+        "using namespace std;",
+        "",
     ]
 
-    namespace = 'libforefire'
+    namespace = "libforefire"
 
     # Generate class member variables
     member_vars = ""
@@ -68,46 +75,61 @@ def generate_cpp_from_python(python_file_path, cpp_output_path, function_name, c
     # Add any additional member variables if needed
     # For example, if 'slope_rad' is used, it should be defined or calculated in C++
 
-    class_declaration = f"class {class_name}: public PropagationModel {{\n" \
-                        f"public:\n" \
-                        f"    {class_name}(const int& = 0, DataBroker* db=0);\n" \
-                        f"    virtual ~{class_name}();\n\n" \
-                        f"    string getName();\n" \
-                        f"    double getSpeed(double*);\n\n" \
-                        f"private:\n" \
-                        f"{member_vars}" \
-                        f"    double windReductionFactor;\n" \
-                        f"}};\n\n"
+    class_declaration = (
+        f"class {class_name}: public PropagationModel {{\n"
+        f"public:\n"
+        f"    {class_name}(const int& = 0, DataBroker* db=0);\n"
+        f"    virtual ~{class_name}();\n\n"
+        f"    string getName();\n"
+        f"    double getSpeed(double*);\n\n"
+        f"private:\n"
+        f"{member_vars}"
+        f"    double windReductionFactor;\n"
+        f"}};\n\n"
+    )
 
     # Function implementation template
-    function_implementation = f"{class_name}::{class_name}(const int & mindex, DataBroker* db)\n" \
-                               f": PropagationModel(mindex, db) {{\n" \
-                               f"    /* Defining the properties needed for the model */\n" \
-                               f"    windReductionFactor = params->getDouble(\"windReductionFactor\");\n\n"
+    function_implementation = (
+        f"{class_name}::{class_name}(const int & mindex, DataBroker* db)\n"
+        f": PropagationModel(mindex, db) {{\n"
+        f"    /* Defining the properties needed for the model */\n"
+        f'    windReductionFactor = params->getDouble("windReductionFactor");\n\n'
+    )
 
     for var, attr in z_assignments.items():
-        function_implementation += f"    {var}_ = registerProperty(\"fuel.{attr}\");\n"
+        function_implementation += f'    {var}_ = registerProperty("fuel.{attr}");\n'
 
-    function_implementation += "\n    /* Allocating the vector for the values of these properties */\n" \
-                               "    if (numProperties > 0) properties = new double[numProperties];\n\n" \
-                               "    /* Registering the model in the data broker */\n" \
-                               "    dataBroker->registerPropagationModel(this);\n\n" \
-                               "    /* Definition of the coefficients */\n" \
-                               "}\n\n" \
-                               f"{class_name}::~{class_name}() {{\n" \
-                               f"}}\n\n" \
-                               f"string {class_name}::getName() {{\n" \
-                               f"    return \"{class_name}\";\n" \
-                               f"}}\n\n"
+    function_implementation += (
+        "\n    /* Allocating the vector for the values of these properties */\n"
+        "    if (numProperties > 0) properties = new double[numProperties];\n\n"
+        "    /* Registering the model in the data broker */\n"
+        "    dataBroker->registerPropagationModel(this);\n\n"
+        "    /* Definition of the coefficients */\n"
+        "}\n\n"
+        f"{class_name}::~{class_name}() {{\n"
+        f"}}\n\n"
+        f"string {class_name}::getName() {{\n"
+        f'    return "{class_name}";\n'
+        f"}}\n\n"
+    )
 
     # Extract the function body and translate it
-    class_method = translate_python_function_to_cpp(func_def, class_name, z_assignments, comment_dict)
+    class_method = translate_python_function_to_cpp(
+        func_def, class_name, z_assignments, comment_dict
+    )
 
     # Combine all parts
-    cpp_code = '\n'.join(includes) + f"namespace {namespace} {{\n\n" + class_declaration + function_implementation + class_method + "}\n"
+    cpp_code = (
+        "\n".join(includes)
+        + f"namespace {namespace} {{\n\n"
+        + class_declaration
+        + function_implementation
+        + class_method
+        + "}\n"
+    )
 
     # Write to the output C++ file
-    with open(cpp_output_path, 'w') as cpp_file:
+    with open(cpp_output_path, "w") as cpp_file:
         cpp_file.write(cpp_code)
 
     print(f"C++ code has been generated and saved to '{cpp_output_path}'.")
@@ -122,10 +144,12 @@ def extract_comments(python_code):
     """
     comment_dict = {}
     f = StringIO(python_code)
-    for toknum, tokval, (srow, scol), (erow, ecol), _ in tokenize.generate_tokens(f.readline):
+    for toknum, tokval, (srow, scol), (erow, ecol), _ in tokenize.generate_tokens(
+        f.readline
+    ):
         if toknum == tokenize.COMMENT:
             # Store comment without the '#' symbol and strip leading whitespace
-            comment_text = tokval.lstrip('#').strip()
+            comment_text = tokval.lstrip("#").strip()
             comment_dict[srow] = comment_text
     return comment_dict
 
@@ -154,7 +178,9 @@ def translate_python_function_to_cpp(func_def, class_name, z_assignments, commen
 
     # Traverse the function body
     for node in func_def.body:
-        translated_code = translate_ast_node_with_comments(node, indent, comment_dict, func_def.lineno)
+        translated_code = translate_ast_node_with_comments(
+            node, indent, comment_dict, func_def.lineno
+        )
         method_body += translated_code
 
     method_body += "}\n\n"
@@ -168,7 +194,7 @@ def get_function_source_lines(func_def):
     :param func_def: AST node of the Python function.
     :return: List of source lines.
     """
-    if hasattr(func_def, 'body') and func_def.body:
+    if hasattr(func_def, "body") and func_def.body:
         # Assuming the function is part of a parsed AST from the entire file
         # There's no direct way to get source lines from AST nodes
         # So we skip this function for simplicity
@@ -188,22 +214,32 @@ def translate_ast_node_with_comments(node, indent, comment_dict, func_start_line
     """
     translated_code = ""
     # Calculate the actual line number of the node
-    lineno = getattr(node, 'lineno', None)
+    lineno = getattr(node, "lineno", None)
     if lineno and lineno in comment_dict:
         comment = comment_dict[lineno]
         translated_code += f"{indent}/* {comment} */\n"
 
     if isinstance(node, ast.Assign):
         # Skip assignments from Z.*, already handled
-        if isinstance(node.value, ast.Attribute) and isinstance(node.value.value, ast.Name) and node.value.value.id == 'Z':
+        if (
+            isinstance(node.value, ast.Attribute)
+            and isinstance(node.value.value, ast.Name)
+            and node.value.value.id == "Z"
+        ):
             return translated_code
         translated_code += translate_assign(node, indent)
     elif isinstance(node, ast.If):
-        translated_code += translate_if_with_comments(node, indent, comment_dict, func_start_lineno)
+        translated_code += translate_if_with_comments(
+            node, indent, comment_dict, func_start_lineno
+        )
     elif isinstance(node, ast.Expr):
-        translated_code += translate_expr_with_comments(node, indent, comment_dict, func_start_lineno)
+        translated_code += translate_expr_with_comments(
+            node, indent, comment_dict, func_start_lineno
+        )
     elif isinstance(node, ast.Return):
-        translated_code += translate_return_with_comments(node, indent, comment_dict, func_start_lineno)
+        translated_code += translate_return_with_comments(
+            node, indent, comment_dict, func_start_lineno
+        )
     else:
         translated_code += f"{indent}// Unsupported node type: {type(node)}\n"
     return translated_code
@@ -240,7 +276,9 @@ def translate_if_with_comments(node, indent, comment_dict, func_start_lineno):
     """
     cpp = f"{indent}if ({translate_expr_to_cpp(node.test)}) {{\n"
     for stmt in node.body:
-        cpp += translate_ast_node_with_comments(stmt, indent + "    ", comment_dict, func_start_lineno)
+        cpp += translate_ast_node_with_comments(
+            stmt, indent + "    ", comment_dict, func_start_lineno
+        )
     cpp += f"{indent}}}\n"
 
     # Handle elif and else
@@ -248,11 +286,15 @@ def translate_if_with_comments(node, indent, comment_dict, func_start_lineno):
         if isinstance(orelse, ast.If):
             cpp += f"{indent}else if ({translate_expr_to_cpp(orelse.test)}) {{\n"
             for stmt in orelse.body:
-                cpp += translate_ast_node_with_comments(stmt, indent + "    ", comment_dict, func_start_lineno)
+                cpp += translate_ast_node_with_comments(
+                    stmt, indent + "    ", comment_dict, func_start_lineno
+                )
             cpp += f"{indent}}}\n"
         else:
             cpp += f"{indent}else {{\n"
-            cpp += translate_ast_node_with_comments(orelse, indent + "    ", comment_dict, func_start_lineno)
+            cpp += translate_ast_node_with_comments(
+                orelse, indent + "    ", comment_dict, func_start_lineno
+            )
             cpp += f"{indent}}}\n"
     return cpp
 
@@ -268,11 +310,15 @@ def translate_expr_with_comments(node, indent, comment_dict, func_start_lineno):
     :return: C++ code string.
     """
     # Handle print statements
-    if isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Name) and node.value.func.id == 'print':
+    if (
+        isinstance(node.value, ast.Call)
+        and isinstance(node.value.func, ast.Name)
+        and node.value.func.id == "print"
+    ):
         args = node.value.args
         cpp_line = f"{indent}std::cout"
         for arg in args:
-            cpp_line += f" << {translate_expr_to_cpp(arg)} << \" \""
+            cpp_line += f' << {translate_expr_to_cpp(arg)} << " "'
         cpp_line += " << std::endl;\n"
         return cpp_line
     else:
@@ -335,7 +381,7 @@ def translate_expr_to_cpp(expr):
         return expr.id
     elif isinstance(expr, ast.Attribute):
         # For expressions like math.radians
-        if isinstance(expr.value, ast.Name) and expr.value.id == 'math':
+        if isinstance(expr.value, ast.Name) and expr.value.id == "math":
             return f"std::{expr.attr}"
         else:
             return f"{translate_expr_to_cpp(expr.value)}.{expr.attr}"
@@ -370,19 +416,19 @@ def translate_operator(op):
     :return: C++ operator as string.
     """
     operators = {
-        ast.Add: '+',
-        ast.Sub: '-',
-        ast.Mult: '*',
-        ast.Div: '/',
-        ast.Mod: '%',
-        ast.LShift: '<<',
-        ast.RShift: '>>',
-        ast.BitOr: '|',
-        ast.BitXor: '^',
-        ast.BitAnd: '&',
-        ast.FloorDiv: '/'
+        ast.Add: "+",
+        ast.Sub: "-",
+        ast.Mult: "*",
+        ast.Div: "/",
+        ast.Mod: "%",
+        ast.LShift: "<<",
+        ast.RShift: ">>",
+        ast.BitOr: "|",
+        ast.BitXor: "^",
+        ast.BitAnd: "&",
+        ast.FloorDiv: "/",
     }
-    return operators.get(type(op), '?')
+    return operators.get(type(op), "?")
 
 
 def translate_unary_operator(op):
@@ -392,13 +438,8 @@ def translate_unary_operator(op):
     :param op: AST unary operator.
     :return: C++ operator as string.
     """
-    operators = {
-        ast.UAdd: '+',
-        ast.USub: '-',
-        ast.Not: '!',
-        ast.Invert: '~'
-    }
-    return operators.get(type(op), '?')
+    operators = {ast.UAdd: "+", ast.USub: "-", ast.Not: "!", ast.Invert: "~"}
+    return operators.get(type(op), "?")
 
 
 def translate_comparator(op):
@@ -409,18 +450,18 @@ def translate_comparator(op):
     :return: C++ comparator as string.
     """
     comparators = {
-        ast.Eq: '==',
-        ast.NotEq: '!=',
-        ast.Lt: '<',
-        ast.LtE: '<=',
-        ast.Gt: '>',
-        ast.GtE: '>=',
-        ast.Is: '==',
-        ast.IsNot: '!=',
-        ast.In: '==',  # Simplification
-        ast.NotIn: '!='  # Simplification
+        ast.Eq: "==",
+        ast.NotEq: "!=",
+        ast.Lt: "<",
+        ast.LtE: "<=",
+        ast.Gt: ">",
+        ast.GtE: ">=",
+        ast.Is: "==",
+        ast.IsNot: "!=",
+        ast.In: "==",  # Simplification
+        ast.NotIn: "!=",  # Simplification
     }
-    return comparators.get(type(op), '?')
+    return comparators.get(type(op), "?")
 
 
 def translate_bool_operator(op):
@@ -430,11 +471,8 @@ def translate_bool_operator(op):
     :param op: AST boolean operator.
     :return: C++ boolean operator as string.
     """
-    bool_ops = {
-        ast.And: '&&',
-        ast.Or: '||'
-    }
-    return bool_ops.get(type(op), '?')
+    bool_ops = {ast.And: "&&", ast.Or: "||"}
+    return bool_ops.get(type(op), "?")
 
 
 def translate_function_call(func):
@@ -454,4 +492,9 @@ def translate_function_call(func):
 
 
 # Example usage:
-generate_cpp_from_python('RothermelAndrews2018.py', 'RothermelAndrews2018.cpp', 'RothermelAndrews2018', 'RothermelAndrews2018')
+""" generate_cpp_from_python(
+    "RothermelAndrews2018.py",
+    "RothermelAndrews2018.cpp",
+    "RothermelAndrews2018",
+    "RothermelAndrews2018",
+) """

@@ -5,4 +5,3 @@ Created on Wed Sep 27 17:50:20 2023
 
 fuel and models package
 """
-

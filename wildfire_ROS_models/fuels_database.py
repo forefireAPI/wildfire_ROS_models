@@ -12,18 +12,16 @@ This module contains values for parameters as of some databases such as :
 data may be imported as csv files, here stored as variables. 
 All variables are post-fixed with the units such as defined in the original paper, 
 corresponding to the units shortname in model_set.py
-
     
 convention for variable names such as in parameter keys
 
 Author: Jean-Baptiste Filippi
 Organization: CNRS
 License: GPL
-
 """
 
 
-# from Andrews and Rothermel 2017 
+# from Andrews and Rothermel 2017
 AR2017_table_csv = """
 CODE,ftype,fl1h_tac,fl10h_tac,fl100h_tac,flLherb_tac,flLwood_tac,SAV1h_ftinv,SAVLDherb_ftinv,SAVLwood,fd_ft,Dme_pc,SAVcar_ftinv,bulkDens_lbft3,packRatio_r
 A4,S,5.0,4.0,2.0,0,5.0,2000,0,1500,6.0,20,1739,0.12,0.52
@@ -83,6 +81,65 @@ SB3,5.50,2.75,3.00,0.00,0.00,N/A,2000,9999,9999,1.2,25,8000
 SB4,5.25,3.50,5.25,0.00,0.00,N/A,2000,9999,9999,2.7,25,8000 """
 
 
+fpi_fuel_parameters_csv = """
+Code,Fuel_Name,windrf,fueldepthm,savr,fuelmce,fueldens,st,se,weight,fci_d,fct,ichap,fgi_1h,fgi_10h,fgi_100h,fgi_1000h,fgi_live,fgi_lh,fgi
+1,1: Short grass (1 ft),0.36,0.305,3500,0.12,32,0.0555,0.010,7,0,60,0,0.74,0.00,0.00,0.0,0.00,0.00,0.166
+2,2: Timber (grass and understory),0.36,0.305,2784,0.15,32,0.0555,0.010,7,0,60,0,2.00,1.00,0.00,0.0,0.00,0.00,0.896
+3,3: Tall grass (2.5 ft),0.44,0.762,1500,0.25,32,0.0555,0.010,7,0,60,0,3.01,0.00,0.00,0.0,0.00,0.00,0.674
+4,4: Chaparral (6 ft),0.55,1.829,1739,0.20,32,0.0555,0.010,180,1.123,60,1,5.01,4.01,2.00,0.0,5.01,0.00,3.591
+5,5: Brush (2 ft),0.42,0.61,1683,0.20,32,0.0555,0.010,100,0,60,0,1.00,0.50,0.00,0.0,2.00,0.00,0.784
+6,6: Dormant brush, hardwood slash,0.44,0.762,1564,0.25,32,0.0555,0.010,100,0,60,0,1.50,2.50,2.00,0.0,0.00,0.00,1.344
+7,7: Southern rough,0.44,0.762,1562,0.25,32,0.0555,0.010,100,0,60,0,1.13,1.87,1.50,0.0,0.00,0.00,1.091
+8,8: Closed timber litter,0.36,0.0610,1889,0.40,32,0.0555,0.010,100,0,60,0,1.50,1.00,2.50,0.0,0.00,0.00,1.120
+9,9: Hardwood litter,0.36,0.0610,2484,0.25,32,0.0555,0.010,100,0,60,0,2.92,0.41,0.15,0.0,0.00,0.00,0.780
+10,10: Timber (litter + understory),0.36,0.305,1764,0.20,32,0.0555,0.010,100,0,60,0,3.01,2.00,5.01,0.0,5.01,0.00,3.591
+11,11: Light logging slash,0.36,0.305,1182,0.20,32,0.0555,0.010,100,0,60,0,1.50,4.51,5.01,0.0,7.01,0.00,7.749
+12,12: Medium logging slash,0.36,0.701,1145,0.20,32,0.0555,0.010,100,0,60,0,4.01,14.03,16.53,0.0,0.00,0.00,13.024
+13,13: Heavy logging slash,0.36,0.914,1159,0.25,32,0.0555,0.010,100,0,60,0,7.01,23.04,28.05,0.0,0.00,0.00,1.e-7
+14,14: no fuel,0.43,0.305,3500,0.12,32,0.0555,0.010,7,0,60,0,0.00,0.00,0.00,0.0,0.00,0.00,0.000
+15,15: Short, Sparse Dry Climate Grass (Dynamic) [GR1 (101)],0.46,0.1219,2200,0.15,32,0.0555,0.010,7,0,60,0,0.10,0.00,0.00,0.0,0.00,0.00,0.0224
+16,16: Low Load, Dry Climate Grass (Dynamic) GR2 (102),0.36,0.3048,2000,0.15,32,0.0555,0.010,7,0,60,0,0.10,0.00,0.00,0.0,0.00,0.00,0.0224
+17,17: Low Load, Very Coarse, Humid Climate Grass (Dynamic) [GR3 (103)],0.44,0.6096,1500,0.25,32,0.0555,0.010,7,0,60,0,0.10,0.40,0.00,0.0,0.00,0.00,0.1121
+18,18: Moderate Load, Dry Climate Grass (Dynamic) [GR4 (104)],0.55,0.6096,1800,0.20,32,0.0555,0.010,9999,0,60,1,5.01,4.01,2.00,0.0,5.01,0.00,3.591
+19,19: Low Load, Humid Climate Grass (Dynamic) [GR5 (105)],0.42,0.4572,1683,0.20,32,0.0555,0.010,100,0,60,0,1.00,0.50,0.00,0.0,2.00,0.00,0.784
+20,20: Moderate Load, Humid Climate Grass (Dynamic) [GR6 (106)],0.44,0.4572,1564,0.25,32,0.0555,0.010,100,0,60,0,1.50,2.50,2.00,0.0,0.00,0.00,1.344
+21,21: High Load, Dry Climate Grass (Dynamic) [GR7 (107)],0.44,0.9144,1562,0.25,32,0.0555,0.010,100,0,60,0,1.13,1.87,1.50,0.0,0.00,0.00,1.091
+22,22: High Load, Very Coarse, Humid Climate Grass (Dynamic) [GR8 (108)],0.36,1.2192,9999,0.00,32,0.0555,0.010,9999,0,60,0,0.00,0.00,0.00,0.0,0.00,0.00,0.000
+23,23: Very High Load, Humid Climate Grass (Dynamic) [GR9 (109)],0.36,1.5240,9999,0.00,32,0.0555,0.010,9999,0,60,0,0.00,0.00,0.00,0.0,0.00,0.00,0.000
+24,24: Low Load, Dry Climate Grass-Shrub (Dynamic) [GS1 (121)],0.36,0.2743,2000,0.15,32,0.0555,0.010,9999,0,60,0,0.20,0.50,0.00,0.0,0.00,0.00,0.000
+25,25: Moderate Load, Dry Climate Grass-Shrub (Dynamic) [GS2 (122)],0.36,0.4572,2000,0.25,32,0.0555,0.010,9999,0,60,0,0.30,0.25,0.00,0.0,0.00,0.00,0.000
+26,26: Moderate Load, Humid Climate Grass-Shrub (Dynamic) [GS3 (123)],0.36,0.5486,1800,0.15,32,0.0555,0.010,9999,0,60,0,0.30,0.25,0.00,0.0,0.00,0.00,0.000
+27,27: High Load, Humid Climate Grass-Shrub (Dynamic) [GS4 (124)],0.36,0.6401,1800,0.25,32,0.0555,0.010,9999,0,60,0,1.90,1.15,0.00,0.0,0.00,0.00,0.000
+28,28: Low Load Dry Climate Shrub (Dynamic) [SH1 (141)],0.36,0.3048,9999,0.15,32,0.0555,0.010,9999,0,60,0,0.25,0.00,0.00,0.0,0.00,0.00,0.000
+29,29: Moderate Load Dry Climate Shrub [SH2 (142)],0.36,0.3962,9999,0.25,32,0.0555,0.010,9999,0,60,0,0.25,0.00,0.00,0.0,0.00,0.00,0.000
+30,30: Moderate Load, Humid Climate Shrub [SH3 (143)],0.36,0.1524,9999,0.25,32,0.0555,0.010,9999,0,60,0,0.00,0.00,0.00,0.0,0.00,0.00,0.000
+31,31: Low Load, Humid Climate Timber-Shrub [SH4 (144)],0.36,0.3048,9999,0.15,32,0.0555,0.010,9999,0,60,0,0.85,0.00,0.20,0.0,0.00,0.00,0.000
+32,32: High Load, Dry Climate Shrub [SH5 (145)],0.36,0.3048,9999,0.40,32,0.0555,0.010,9999,0,60,0,3.60,0.00,0.00,0.0,0.00,0.00,0.000
+33,33: Low Load, Humid Climate Shrub [SH6 (146)],0.36,0.3962,9999,0.30,32,0.0555,0.010,9999,0,60,0,2.90,0.00,1.40,0.0,0.00,0.00,0.000
+34,34: Very High Load, Dry Climate Shrub [SH7 (147)],0.36,0.1524,9999,0.25,32,0.0555,0.010,9999,0,60,0,3.50,0.00,0.00,0.0,0.00,0.00,0.000
+35,35: High Load, Humid Climate Shrub [SH8 (148)],0.36,0.3048,9999,0.15,32,0.0555,0.010,9999,0,60,0,2.05,0.00,0.85,0.0,0.00,0.00,0.000
+36,36: Very High Load, Humid Climate Shrub (Dynamic) [SH9 (149)],0.36,0.3048,1500,0.40,32,0.0555,0.010,9999,0,60,0,4.50,0.00,0.00,0.0,0.00,0.00,0.000
+37,37: Low Load Dry Climate Timber-Grass-Shrub (Dynamic) [TU1 (161)],0.36,0.3048,9999,0.20,32,0.0555,0.010,9999,0,60,0,0.20,0.00,1.00,0.0,0.00,0.00,0.5828
+38,38: Moderate Load, Humid Climate Timber-Shrub [TU2 (162)],0.36,0.3962,9999,0.30,32,0.0555,0.010,9999,0,60,0,0.95,1.80,1.25,0.0,0.00,0.00,0.8967
+39,39: Moderate Load, Humid Climate Timber-Grass-Shrub (Dynamic) [TU3 (163)],0.36,0.1524,9999,0.20,32,0.0555,0.010,9999,0,60,0,1.10,0.15,0.25,0.0,0.00,0.00,0.3363
+40,40: Dwarf Conifer With Understory [TU4 (164)],0.36,0.3658,9999,0.25,32,0.0555,0.010,9999,0,60,0,4.50,0.00,0.00,0.0,0.00,0.00,0.000
+41,41: Very High Load, Dry Climate Timber-Shrub [TU5 (165)],0.36,0.8230,9999,0.25,32,0.0555,0.010,9999,0,60,0,4.00,4.00,3.00,0.0,0.00,0.00,0.000
+42,42: Low Load Compact Conifer Litter [TL1 (181)],0.36,0.3658,9999,0.12,32,0.0555,0.010,9999,0,60,0,1.00,2.20,3.60,0.0,0.00,0.00,0.000
+43,43: Low Load Broadleaf Litter [TL2 (182)],0.36,0.3048,9999,0.25,32,0.0555,0.010,9999,0,60,0,2.20,2.30,2.20,0.0,0.00,0.00,0.000
+44,44: Moderate Load Conifer Litter [TL3 (183)],0.36,0.5486,9999,0.25,32,0.0555,0.010,9999,0,60,0,2.80,2.20,2.80,0.0,0.00,0.00,0.000
+45,45: Small downed logs [TL4 (184)],0.36,0.6401,9999,0.25,32,0.0555,0.010,9999,0,60,0,4.20,4.20,4.20,0.0,0.00,0.00,0.000
+46,46: High Load Conifer Litter [TL5 (185)],0.36,0.3658,9999,0.25,32,0.0555,0.010,9999,0,60,0,1.20,1.20,1.20,0.0,0.00,0.00,0.000
+47,47: Moderate Load Broadleaf Litter [TL6 (186)],0.36,0.3048,9999,0.25,32,0.0555,0.010,9999,0,60,0,1.40,1.40,1.40,0.0,0.00,0.00,0.000
+48,48: Large Downed Logs [TL7 (187)],0.36,0.3658,9999,0.25,32,0.0555,0.010,9999,0,60,0,8.10,1.10,1.10,0.0,0.00,0.00,0.000
+49,49: Long-Needle Litter [TL8 (188)],0.36,0.3658,9999,0.25,32,0.0555,0.010,9999,0,60,0,1.10,1.10,4.15,0.0,0.00,0.00,0.000
+50,50: Very High Load Broadleaf Litter [TL9 (189)],0.36,0.8230,9999,0.25,32,0.0555,0.010,9999,0,60,0,6.65,0.00,0.00,0.0,0.00,0.00,0.000
+51,51: Low Load Activity Fuel [SB1 (201)],0.36,0.3048,9999,0.25,32,0.0555,0.010,9999,0,60,0,1.50,0.00,0.00,0.0,0.00,0.00,0.000
+52,52: Moderate Load Activity Fuel or Low Load Blowdown [SB2 (202)],0.36,0.3048,9999,0.25,32,0.0555,0.010,9999,0,60,0,4.50,0.00,0.00,0.0,0.00,0.00,0.000
+53,53: High Load Activity Fuel or Moderate Load Blowdown [SB3 (203)],0.36,0.3962,9999,0.25,32,0.0555,0.010,9999,0,60,0,5.50,0.00,0.00,0.0,0.00,0.00,0.000
+54,54: High Load Blowdown [SB4 (204)],0.36,0.1524,9999,0.25,32,0.0555,0.010,9999,0,60,0,5.25,0.00,0.00,0.0,0.00,0.00,0.000
+"""
+
+
 import csv
 import io
 from .model_set import *
@@ -118,68 +175,76 @@ def to_csv(dicts):
 def load_csv(csv_string):
     def convert_if_number(s):
         try:
-            return int(s) if '.' not in s else float(s)
+            return int(s) if "." not in s else float(s)
         except ValueError:
             return s
 
     def remove_suffix_for_check(key):
-        return key.split('_')[0]
+        return key.split("_")[0]
 
     # Split the CSV string into lines
-    lines = csv_string.strip().split('\n')
+    lines = csv_string.strip().split("\n")
 
     # Extract the original headers
-    original_headers = lines[0].split(',')
+    original_headers = lines[0].split(",")
 
     # Check if headers (without suffix) are in fuel_properties
     for header in original_headers:
         check_header = remove_suffix_for_check(header)
         if check_header not in var_properties:
-            print(f"Warning: '{check_header}' not found in as typical fuel parameter name")
+            print(
+                f"Warning: '{check_header}' not found in as typical fuel parameter name"
+            )
 
     # List to store all the dictionaries
     dict_list = []
 
     # Iterate over each line except the header
     for line in lines[1:]:
-        values = [convert_if_number(value) for value in line.split(',')]
-        dict_entry = {header: value for header, value in zip(original_headers, values)} #if remove_suffix_for_check(header) in var_properties}
+        values = [convert_if_number(value) for value in line.split(",")]
+        dict_entry = {
+            header: value for header, value in zip(original_headers, values)
+        }  # if remove_suffix_for_check(header) in var_properties}
         dict_list.append(model_parameters(dict_entry))
 
     return dict_list
 
 
-
 def to_latex(data_dict):
     """
     Generate a LaTeX table from a fuel dictionary.
-    
+
     Parameters:
     - data_dict (dict): A dictionary with the fuel data.
-    
+
     Returns:
     - str: A string containing the LaTeX code for the table.
     """
     # Start the LaTeX table code with the longtable environment
     first_row_values = next(iter(data_dict.values()))
     num_columns = len(first_row_values) + 1  # Additional column for the code
-    latex_table = "\\begin{longtable}{|" + "l|" + "c|" * (num_columns - 1) + "}\n\\hline\n"
+    latex_table = (
+        "\\begin{longtable}{|" + "l|" + "c|" * (num_columns - 1) + "}\n\\hline\n"
+    )
 
     # Generate column headers from the keys of the first item in the dictionary and escape underscores for LaTeX
     headers = first_row_values.keys()
-    escaped_headers = ["Code"] + [key.replace('_', ' ') for key in headers]
-    latex_table += " & ".join(escaped_headers) + " \\\\\n\\hline\n\\endfirsthead\n\\hline\n"
+    escaped_headers = ["Code"] + [key.replace("_", " ") for key in headers]
+    latex_table += (
+        " & ".join(escaped_headers) + " \\\\\n\\hline\n\\endfirsthead\n\\hline\n"
+    )
 
     # Add the data rows
     for code, values in data_dict.items():
         row_data = [str(values[key]) for key in headers]
-        escaped_row_data = [data.replace('_', '\\_') for data in row_data]
+        escaped_row_data = [data.replace("_", "\\_") for data in row_data]
         latex_table += code + " & " + " & ".join(escaped_row_data) + " \\\\\n\\hline\n"
 
     # End the LaTeX table code
     latex_table += "\\end{longtable}"
 
     return latex_table
+
 
 def to_latex_file(table_dict, latex_file_name):
     """
@@ -193,7 +258,7 @@ def to_latex_file(table_dict, latex_file_name):
     - Nothing
     """
     # LaTeX document structure
-    
+
     latex_document = (
         "\\documentclass{article}\n"
         "\\usepackage[utf8]{inputenc}\n"
@@ -202,12 +267,10 @@ def to_latex_file(table_dict, latex_file_name):
         "\\begin{document}\n"
         "\\begin{landscape}\n"
         "\\tiny\n"  # Set the font size to small
-        + to_latex_table(table_dict) +
-        "\n\\end{landscape}\n"
+        + to_latex_table(table_dict)
+        + "\n\\end{landscape}\n"
         "\\end{document}"
     )
- 
-    
-    with open(latex_file_name, 'w') as file:
-        file.write(latex_document)
 
+    with open(latex_file_name, "w") as file:
+        file.write(latex_document)

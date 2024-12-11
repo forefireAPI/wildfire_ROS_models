@@ -14,14 +14,14 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/forefireAPI/wildfire_ROS_models/",  # Replace with your repo URL
-    packages=['wildfire_ROS_models'],
-    package_dir={'wildfire_ROS_models': 'wildfire_ROS_models'},
+    packages=["wildfire_ROS_models"],
+    package_dir={"wildfire_ROS_models": "wildfire_ROS_models"},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",  # Choose your license
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.7',
+    python_requires=">=3.7",
     install_requires=[
         "matplotlib>=3.5.0",
         "numpy>=1.21.0",
@@ -31,8 +31,8 @@ setup(
         # Add other dependencies here
     ],
     entry_points={
-        'console_scripts': [
-            'sensitivity_analysis=wildfire_ROS_models.scripts.sensitivity_analysis:main',
+        "console_scripts": [
+            "sensitivity_analysis=wildfire_ROS_models.scripts.sensitivity_analysis:main",
         ],
     },
     include_package_data=True,
